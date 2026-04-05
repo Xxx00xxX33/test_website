@@ -1,33 +1,27 @@
-FROM node:20-bookworm-slim AS base
+FROM node:20-bookworm-slim AS build
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 make g++ \
   && rm -rf /var/lib/apt/lists/*
 
-# Install dependencies
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+
 COPY package.json package-lock.json ./
 RUN npm install
 
-# Build
 COPY . .
 ENV NODE_OPTIONS=--max-old-space-size=4096
 RUN npm run build
 
-# Production image
 FROM node:20-bookworm-slim AS runner
 WORKDIR /app
 
-ENV NODE_ENV=production
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
 
-COPY --from=base /app/package.json ./
-COPY --from=base /app/node_modules ./node_modules
-COPY --from=base /app/dist ./dist
-COPY --from=base /app/build ./build
-COPY --from=base /app/public ./public
-COPY --from=base /app/src ./src
-COPY --from=base /app/config ./config
-COPY --from=base /app/database ./database
+COPY --from=build /app ./
 
 EXPOSE 1337
 

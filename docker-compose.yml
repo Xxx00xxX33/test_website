@@ -21,7 +21,11 @@ services:
       - strapi_uploads:/app/public/uploads
       - strapi_db:/app/.tmp
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:1337/_health"]
+      test:
+        - CMD
+        - node
+        - -e
+        - require('http').get('http://localhost:1337/_health', res => process.exit(res.statusCode === 204 || res.statusCode === 200 ? 0 : 1)).on('error', () => process.exit(1))
       interval: 30s
       timeout: 10s
       retries: 5

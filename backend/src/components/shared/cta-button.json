@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_cta_buttons",
+  "info": {
+    "displayName": "CTA Button",
+    "icon": "cursor",
+    "description": "Call to action button"
+  },
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string"
+    },
+    "style": {
+      "type": "enumeration",
+      "enum": ["primary", "secondary", "outline", "whatsapp"],
+      "default": "primary"
+    },
+    "isExternal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

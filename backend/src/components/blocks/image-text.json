@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_blocks_image_texts",
+  "info": {
+    "displayName": "Image & Text",
+    "icon": "landscape",
+    "description": "Image and text side by side section"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "content": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "imagePosition": {
+      "type": "enumeration",
+      "enum": ["left", "right"],
+      "default": "left"
+    },
+    "buttons": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.cta-button"
+    }
+  }
+}

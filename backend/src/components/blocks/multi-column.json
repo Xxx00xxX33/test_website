@@ -1,0 +1,28 @@
+{
+  "collectionName": "components_blocks_multi_columns",
+  "info": {
+    "displayName": "Multi Column",
+    "icon": "apps",
+    "description": "Multi-column information layout"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "columns": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.column-item"
+    },
+    "columnCount": {
+      "type": "enumeration",
+      "enum": ["2", "3", "4"],
+      "default": "3"
+    }
+  }
+}

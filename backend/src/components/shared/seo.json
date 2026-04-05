@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_shared_seo",
+  "info": {
+    "displayName": "SEO",
+    "icon": "search",
+    "description": "SEO metadata for pages"
+  },
+  "attributes": {
+    "metaTitle": {
+      "type": "string",
+      "maxLength": 120
+    },
+    "metaDescription": {
+      "type": "text",
+      "maxLength": 300
+    },
+    "metaImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "canonicalURL": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-50: #fef7ed;
+  --color-primary-100: #fdecd4;
+  --color-primary-200: #fad5a8;
+  --color-primary-300: #f6b871;
+  --color-primary-400: #f19038;
+  --color-primary-500: #ee7a1b;
+  --color-primary-600: #df5f0e;
+  --color-primary-700: #b9470e;
+  --color-primary-800: #933914;
+  --color-primary-900: #773113;
+  --color-primary-950: #401607;
+
+  --color-warm-50: #fdf8f0;
+  --color-warm-100: #f9eedd;
+  --color-warm-200: #f2daba;
+  --color-warm-300: #eac18e;
+  --color-warm-400: #e0a05f;
+  --color-warm-500: #d88840;
+  --color-warm-600: #ca7235;
+  --color-warm-700: #a85a2d;
+  --color-warm-800: #87492b;
+  --color-warm-900: #6e3d26;
+  --color-warm-950: #3b1e12;
+
+  --color-accent-50: #f0f9f4;
+  --color-accent-100: #dbf0e3;
+  --color-accent-200: #bae0cb;
+  --color-accent-300: #8cc9a9;
+  --color-accent-400: #5bab83;
+  --color-accent-500: #399067;
+  --color-accent-600: #287352;
+  --color-accent-700: #205c43;
+  --color-accent-800: #1c4a37;
+  --color-accent-900: #183d2e;
+  --color-accent-950: #0c221a;
+
+  --font-sans: 'Noto Sans SC', 'Noto Sans TC', 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom prose styles for rich text */
+.prose {
+  max-width: 65ch;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  color: var(--color-primary-900);
+}
+
+.prose a {
+  color: var(--color-primary-600);
+}
+
+.prose a:hover {
+  color: var(--color-primary-700);
+}

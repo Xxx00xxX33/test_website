@@ -1,0 +1,52 @@
+{
+  "kind": "singleType",
+  "collectionName": "home_pages",
+  "info": {
+    "singularName": "home-page",
+    "pluralName": "home-pages",
+    "displayName": "Home Page",
+    "description": "Homepage content with dynamic zones"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "seo": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.seo",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "blocks": {
+      "type": "dynamiczone",
+      "components": [
+        "blocks.hero-banner",
+        "blocks.brand-intro",
+        "blocks.service-highlights",
+        "blocks.process-steps",
+        "blocks.featured-destinations",
+        "blocks.image-text",
+        "blocks.testimonials-section",
+        "blocks.faq-section",
+        "blocks.contact-cta",
+        "blocks.gallery-video",
+        "blocks.multi-column",
+        "blocks.rich-text"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_shared_column_items",
+  "info": {
+    "displayName": "Column Item",
+    "icon": "layout",
+    "description": "A column in a multi-column section"
+  },
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

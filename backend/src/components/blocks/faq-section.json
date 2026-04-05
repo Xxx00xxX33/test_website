@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_blocks_faq_sections",
+  "info": {
+    "displayName": "FAQ Section",
+    "icon": "question",
+    "description": "Frequently asked questions accordion"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "subtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "items": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.faq-item"
+    },
+    "showMoreLink": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

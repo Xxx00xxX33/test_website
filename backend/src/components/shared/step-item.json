@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_shared_step_items",
+  "info": {
+    "displayName": "Step Item",
+    "icon": "arrowRight",
+    "description": "A step in a process flow"
+  },
+  "attributes": {
+    "stepNumber": {
+      "type": "integer"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

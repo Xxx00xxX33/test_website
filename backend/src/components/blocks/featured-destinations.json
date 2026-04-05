@@ -1,0 +1,42 @@
+{
+  "collectionName": "components_blocks_featured_destinations",
+  "info": {
+    "displayName": "Featured Destinations",
+    "icon": "earth",
+    "description": "Grid of featured destination cards"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "subtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "maxItems": {
+      "type": "integer",
+      "default": 6
+    },
+    "showMoreButton": {
+      "type": "boolean",
+      "default": true
+    },
+    "buttonText": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

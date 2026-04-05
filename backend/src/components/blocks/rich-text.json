@@ -1,0 +1,19 @@
+{
+  "collectionName": "components_blocks_rich_texts",
+  "info": {
+    "displayName": "Rich Text",
+    "icon": "feather",
+    "description": "Free-form rich text content block"
+  },
+  "attributes": {
+    "content": {
+      "type": "richtext",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

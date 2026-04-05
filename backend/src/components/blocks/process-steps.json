@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_blocks_process_steps",
+  "info": {
+    "displayName": "Process Steps",
+    "icon": "arrowRight",
+    "description": "Step-by-step process flow"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "subtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "steps": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.step-item"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_blocks_brand_intros",
+  "info": {
+    "displayName": "Brand Introduction",
+    "icon": "information",
+    "description": "Brand story and value proposition section"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "content": {
+      "type": "richtext",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "imagePosition": {
+      "type": "enumeration",
+      "enum": ["left", "right"],
+      "default": "right"
+    }
+  }
+}

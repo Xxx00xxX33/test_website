@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_shared_feature_items",
+  "info": {
+    "displayName": "Feature Item",
+    "icon": "star",
+    "description": "A feature or highlight item with icon, title and description"
+  },
+  "attributes": {
+    "icon": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    }
+  }
+}

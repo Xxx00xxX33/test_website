@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_blocks_testimonials_sections",
+  "info": {
+    "displayName": "Testimonials Section",
+    "icon": "quote",
+    "description": "Customer testimonials carousel or grid"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "subtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "testimonials": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.testimonial-item"
+    }
+  }
+}

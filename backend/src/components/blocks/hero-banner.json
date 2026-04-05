@@ -1,0 +1,48 @@
+{
+  "collectionName": "components_blocks_hero_banners",
+  "info": {
+    "displayName": "Hero Banner",
+    "icon": "picture",
+    "description": "Full-width hero banner with title, subtitle and CTA"
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "subtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "backgroundVideo": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["videos"]
+    },
+    "buttons": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.cta-button"
+    },
+    "overlayOpacity": {
+      "type": "integer",
+      "default": 40,
+      "min": 0,
+      "max": 100
+    }
+  }
+}

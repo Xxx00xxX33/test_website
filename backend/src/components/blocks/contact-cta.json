@@ -1,0 +1,44 @@
+{
+  "collectionName": "components_blocks_contact_ctas",
+  "info": {
+    "displayName": "Contact CTA",
+    "icon": "phone",
+    "description": "Call to action section for contacting"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "description": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "buttons": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.cta-button"
+    },
+    "backgroundImage": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": ["images"]
+    },
+    "showWhatsApp": {
+      "type": "boolean",
+      "default": true
+    },
+    "showPhone": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

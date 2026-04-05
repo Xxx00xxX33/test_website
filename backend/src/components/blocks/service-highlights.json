@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_blocks_service_highlights",
+  "info": {
+    "displayName": "Service Highlights",
+    "icon": "star",
+    "description": "Service features and highlights grid"
+  },
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "subtitle": {
+      "type": "text",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "features": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.feature-item"
+    }
+  }
+}

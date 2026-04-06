@@ -4,8 +4,8 @@
   "info": {
     "singularName": "services-page",
     "pluralName": "services-pages",
-    "displayName": "Services Page",
-    "description": "Services page content"
+    "displayName": "服务介绍",
+    "description": "服务介绍页面内容"
   },
   "options": {
     "draftAndPublish": true

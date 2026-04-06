@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_rich_texts",
   "info": {
-    "displayName": "Rich Text",
+    "displayName": "富文本",
     "icon": "feather",
-    "description": "Free-form rich text content block"
+    "description": "自由格式富文本内容区块"
   },
   "attributes": {
     "content": {

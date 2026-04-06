@@ -4,8 +4,8 @@
   "info": {
     "singularName": "home-page",
     "pluralName": "home-pages",
-    "displayName": "Home Page",
-    "description": "Homepage content with dynamic zones"
+    "displayName": "首页",
+    "description": "首页内容（含动态区块）"
   },
   "options": {
     "draftAndPublish": true

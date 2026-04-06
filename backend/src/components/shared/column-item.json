@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_column_items",
   "info": {
-    "displayName": "Column Item",
+    "displayName": "栏目项",
     "icon": "layout",
-    "description": "A column in a multi-column section"
+    "description": "多栏区块中的单栏内容"
   },
   "attributes": {
     "title": {
@@ -15,7 +15,9 @@
     "image": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "icon": {
       "type": "string"

@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_cta_buttons",
   "info": {
-    "displayName": "CTA Button",
+    "displayName": "行动按钮",
     "icon": "cursor",
-    "description": "Call to action button"
+    "description": "行动号召按钮"
   },
   "attributes": {
     "text": {
@@ -15,7 +15,12 @@
     },
     "style": {
       "type": "enumeration",
-      "enum": ["primary", "secondary", "outline", "whatsapp"],
+      "enum": [
+        "primary",
+        "secondary",
+        "outline",
+        "whatsapp"
+      ],
       "default": "primary"
     },
     "isExternal": {

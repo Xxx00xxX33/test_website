@@ -4,8 +4,8 @@
   "info": {
     "singularName": "site-setting",
     "pluralName": "site-settings",
-    "displayName": "Site Settings",
-    "description": "Global site configuration"
+    "displayName": "网站设置",
+    "description": "全局网站配置"
   },
   "options": {
     "draftAndPublish": false
@@ -36,7 +36,9 @@
     "logo": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -46,7 +48,9 @@
     "favicon": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false

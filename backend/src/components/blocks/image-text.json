@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_image_texts",
   "info": {
-    "displayName": "Image & Text",
+    "displayName": "图文模块",
     "icon": "landscape",
-    "description": "Image and text side by side section"
+    "description": "图片与文字并排展示区块"
   },
   "attributes": {
     "heading": {
@@ -25,11 +25,16 @@
     "image": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "imagePosition": {
       "type": "enumeration",
-      "enum": ["left", "right"],
+      "enum": [
+        "left",
+        "right"
+      ],
       "default": "left"
     },
     "buttons": {

@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_faq_sections",
   "info": {
-    "displayName": "FAQ Section",
+    "displayName": "常见问题区块",
     "icon": "question",
-    "description": "Frequently asked questions accordion"
+    "description": "常见问题手风琴区块"
   },
   "attributes": {
     "heading": {

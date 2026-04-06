@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_featured_destinations",
   "info": {
-    "displayName": "Featured Destinations",
+    "displayName": "精选目的地",
     "icon": "earth",
-    "description": "Grid of featured destination cards"
+    "description": "精选目的地卡片网格"
   },
   "attributes": {
     "heading": {

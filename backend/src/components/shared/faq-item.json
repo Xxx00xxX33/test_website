@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_faq_items",
   "info": {
-    "displayName": "FAQ Item",
+    "displayName": "问答项",
     "icon": "question",
-    "description": "A frequently asked question and answer"
+    "description": "一组常见问题与回答"
   },
   "attributes": {
     "question": {

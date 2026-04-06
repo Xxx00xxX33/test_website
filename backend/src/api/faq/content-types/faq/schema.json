@@ -4,8 +4,8 @@
   "info": {
     "singularName": "faq",
     "pluralName": "faqs",
-    "displayName": "FAQ",
-    "description": "Frequently asked questions"
+    "displayName": "常见问题",
+    "description": "常见问题解答"
   },
   "options": {
     "draftAndPublish": true
@@ -36,7 +36,14 @@
     },
     "category": {
       "type": "enumeration",
-      "enum": ["booking-process", "communication", "senior-friendly", "preparation", "cancellation", "other"],
+      "enum": [
+        "booking-process",
+        "communication",
+        "senior-friendly",
+        "preparation",
+        "cancellation",
+        "other"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false

@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_seo",
   "info": {
-    "displayName": "SEO",
+    "displayName": "SEO设置",
     "icon": "search",
-    "description": "SEO metadata for pages"
+    "description": "页面SEO元数据"
   },
   "attributes": {
     "metaTitle": {
@@ -17,7 +17,9 @@
     "metaImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "canonicalURL": {
       "type": "string"

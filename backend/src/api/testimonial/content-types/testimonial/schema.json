@@ -4,8 +4,8 @@
   "info": {
     "singularName": "testimonial",
     "pluralName": "testimonials",
-    "displayName": "Testimonial",
-    "description": "Customer testimonials and reviews"
+    "displayName": "客户评价",
+    "description": "客户评价与反馈"
   },
   "options": {
     "draftAndPublish": true
@@ -37,7 +37,9 @@
     "avatar": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false

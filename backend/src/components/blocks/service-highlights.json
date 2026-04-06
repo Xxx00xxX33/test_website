@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_service_highlights",
   "info": {
-    "displayName": "Service Highlights",
+    "displayName": "服务亮点",
     "icon": "star",
-    "description": "Service features and highlights grid"
+    "description": "服务特色与亮点网格"
   },
   "attributes": {
     "heading": {

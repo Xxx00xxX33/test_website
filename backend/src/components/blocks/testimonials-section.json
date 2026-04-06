@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_testimonials_sections",
   "info": {
-    "displayName": "Testimonials Section",
+    "displayName": "客户评价区块",
     "icon": "quote",
-    "description": "Customer testimonials carousel or grid"
+    "description": "客户评价轮播或网格展示"
   },
   "attributes": {
     "heading": {

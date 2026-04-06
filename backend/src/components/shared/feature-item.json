@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_feature_items",
   "info": {
-    "displayName": "Feature Item",
+    "displayName": "特色项",
     "icon": "star",
-    "description": "A feature or highlight item with icon, title and description"
+    "description": "含图标、标题和描述的特色项"
   },
   "attributes": {
     "icon": {
@@ -19,7 +19,9 @@
     "image": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     }
   }
 }

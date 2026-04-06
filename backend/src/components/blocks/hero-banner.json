@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_hero_banners",
   "info": {
-    "displayName": "Hero Banner",
+    "displayName": "主横幅",
     "icon": "picture",
-    "description": "Full-width hero banner with title, subtitle and CTA"
+    "description": "全宽主横幅，含标题、副标题和行动按钮"
   },
   "attributes": {
     "title": {
@@ -26,12 +26,16 @@
     "backgroundImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "backgroundVideo": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["videos"]
+      "allowedTypes": [
+        "videos"
+      ]
     },
     "buttons": {
       "type": "component",

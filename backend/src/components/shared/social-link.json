@@ -1,14 +1,24 @@
 {
   "collectionName": "components_shared_social_links",
   "info": {
-    "displayName": "Social Link",
+    "displayName": "社交媒体链接",
     "icon": "link",
-    "description": "Social media link"
+    "description": "社交媒体链接"
   },
   "attributes": {
     "platform": {
       "type": "enumeration",
-      "enum": ["facebook", "instagram", "youtube", "tiktok", "xiaohongshu", "wechat", "twitter", "linkedin", "other"]
+      "enum": [
+        "facebook",
+        "instagram",
+        "youtube",
+        "tiktok",
+        "xiaohongshu",
+        "wechat",
+        "twitter",
+        "linkedin",
+        "other"
+      ]
     },
     "url": {
       "type": "string"

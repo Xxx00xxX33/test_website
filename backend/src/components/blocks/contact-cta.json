@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_contact_ctas",
   "info": {
-    "displayName": "Contact CTA",
+    "displayName": "联系行动号召",
     "icon": "phone",
-    "description": "Call to action section for contacting"
+    "description": "联系引导行动区块"
   },
   "attributes": {
     "heading": {
@@ -30,7 +30,9 @@
     "backgroundImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"]
+      "allowedTypes": [
+        "images"
+      ]
     },
     "showWhatsApp": {
       "type": "boolean",

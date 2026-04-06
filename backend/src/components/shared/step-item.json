@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_step_items",
   "info": {
-    "displayName": "Step Item",
+    "displayName": "步骤项",
     "icon": "arrowRight",
-    "description": "A step in a process flow"
+    "description": "流程中的一个步骤"
   },
   "attributes": {
     "stepNumber": {

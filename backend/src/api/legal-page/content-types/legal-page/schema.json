@@ -4,8 +4,8 @@
   "info": {
     "singularName": "legal-page",
     "pluralName": "legal-pages",
-    "displayName": "Legal Page",
-    "description": "Legal pages like Privacy Policy, Terms, Disclaimer"
+    "displayName": "法务页面",
+    "description": "法务页面，如隐私政策、条款、免责声明"
   },
   "options": {
     "draftAndPublish": true
@@ -45,7 +45,11 @@
     },
     "pageType": {
       "type": "enumeration",
-      "enum": ["privacy-policy", "terms", "disclaimer"],
+      "enum": [
+        "privacy-policy",
+        "terms",
+        "disclaimer"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false

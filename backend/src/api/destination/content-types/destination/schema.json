@@ -4,8 +4,8 @@
   "info": {
     "singularName": "destination",
     "pluralName": "destinations",
-    "displayName": "Destination",
-    "description": "Tour destinations and travel inspirations"
+    "displayName": "目的地",
+    "description": "旅游目的地与旅行灵感"
   },
   "options": {
     "draftAndPublish": true
@@ -77,7 +77,9 @@
     "coverImage": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -87,7 +89,9 @@
     "gallery": {
       "type": "media",
       "multiple": true,
-      "allowedTypes": ["images"],
+      "allowedTypes": [
+        "images"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false
@@ -97,7 +101,9 @@
     "video": {
       "type": "media",
       "multiple": false,
-      "allowedTypes": ["videos"],
+      "allowedTypes": [
+        "videos"
+      ],
       "pluginOptions": {
         "i18n": {
           "localized": false

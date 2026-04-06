@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const labels: Record<string, { message: string; goHome: string }> = {
   'zh-hans': {
@@ -18,10 +18,15 @@ const labels: Record<string, { message: string; goHome: string }> = {
   },
 };
 
+function getLocaleFromPathname(pathname: string): string {
+  const segment = pathname.split('/').filter(Boolean)[0];
+  return segment && labels[segment] ? segment : 'zh-hans';
+}
+
 export default function NotFound() {
-  const params = useParams();
-  const locale = typeof params.locale === 'string' ? params.locale : 'zh-hans';
-  const l = labels[locale] || labels['zh-hans'];
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname || '/');
+  const l = labels[locale];
 
   return (
     <section className="py-24 lg:py-32 bg-white text-center">

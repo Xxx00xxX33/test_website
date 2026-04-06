@@ -4,10 +4,10 @@ import { isValidLocale, type Locale } from '@/lib/i18n';
 import { getDestinations, getStrapiMediaUrl } from '@/lib/strapi';
 import { getFallbackDestinations } from '@/lib/fallback-data';
 
-const pageMeta: Record<string, { title: string; desc: string; heading: string; subtitle: string }> = {
-  'zh-hans': { title: '目的地 - 星途旅行', desc: '探索我们精选的旅行目的地', heading: '旅行目的地', subtitle: '精选适合华人旅客的优质目的地，每一个都经过我们的精心考察' },
-  'zh-hant': { title: '目的地 - 星途旅行', desc: '探索我們精選的旅行目的地', heading: '旅行目的地', subtitle: '精選適合華人旅客的優質目的地' },
-  en: { title: 'Destinations - StarVoyage Travel', desc: 'Explore our handpicked travel destinations', heading: 'Travel Destinations', subtitle: 'Handpicked destinations perfect for Chinese travelers, each carefully vetted by our team' },
+const pageMeta: Record<string, { title: string; desc: string; heading: string; subtitle: string; featured: string; learnMore: string }> = {
+  'zh-hans': { title: '目的地 - 星途旅行', desc: '探索我们精选的旅行目的地', heading: '旅行目的地', subtitle: '精选适合华人旅客的优质目的地，每一个都经过我们的精心考察', featured: '推荐', learnMore: '了解详情' },
+  'zh-hant': { title: '目的地 - 星途旅行', desc: '探索我們精選的旅行目的地', heading: '旅行目的地', subtitle: '精選適合華人旅客的優質目的地', featured: '推薦', learnMore: '了解詳情' },
+  en: { title: 'Destinations - StarVoyage Travel', desc: 'Explore our handpicked travel destinations', heading: 'Travel Destinations', subtitle: 'Handpicked destinations perfect for Chinese travelers, each carefully vetted by our team', featured: 'Featured', learnMore: 'Learn more' },
 };
 
 interface PageProps {
@@ -73,7 +73,7 @@ export default async function DestinationsPage({ params }: PageProps) {
                   )}
                   {dest.featured && (
                     <span className="absolute top-4 right-4 bg-primary-500 text-white text-xs font-medium px-3 py-1 rounded-full">
-                      {locale === 'en' ? 'Featured' : '推荐'}
+                      {meta.featured}
                     </span>
                   )}
                   {dest.region && (
@@ -94,7 +94,7 @@ export default async function DestinationsPage({ params }: PageProps) {
                       <span className="text-xs text-primary-500 font-medium">{dest.durationSuggestion}</span>
                     )}
                     <span className="text-primary-600 text-sm font-medium group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                      {locale === 'en' ? 'Learn more' : '了解详情'}
+                      {meta.learnMore}
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>

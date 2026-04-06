@@ -18,6 +18,8 @@ const contactLabels: Record<string, Record<string, string>> = {
     submit: '提交咨询',
     success: '感谢您的咨询！我们会尽快与您联系。',
     contactInfo: '联系方式',
+    phoneShort: '电话',
+    emailShort: '邮箱',
     orContact: '或直接联系我们',
     address: '地址',
     addressValue: '新加坡乌节路 #08-01 旅游中心大厦',
@@ -37,6 +39,8 @@ const contactLabels: Record<string, Record<string, string>> = {
     submit: '提交諮詢',
     success: '感謝您的諮詢！我們會盡快與您聯繫。',
     contactInfo: '聯繫方式',
+    phoneShort: '電話',
+    emailShort: '電郵',
     orContact: '或直接聯繫我們',
     address: '地址',
     addressValue: '新加坡烏節路 #08-01 旅遊中心大廈',
@@ -56,6 +60,8 @@ const contactLabels: Record<string, Record<string, string>> = {
     submit: 'Submit Inquiry',
     success: 'Thank you for your inquiry! We\'ll get back to you soon.',
     contactInfo: 'Contact Information',
+    phoneShort: 'Phone',
+    emailShort: 'Email',
     orContact: 'Or contact us directly',
     address: 'Address',
     addressValue: '#08-01 Tourism Centre, Orchard Road, Singapore',
@@ -162,7 +168,7 @@ export default function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <p className="font-medium text-primary-900">{locale === 'en' ? 'Phone' : '电话'}</p>
+                      <p className="font-medium text-primary-900">{l.phoneShort}</p>
                       <a href="tel:+6588888888" className="text-primary-600 hover:text-primary-700">+65 8888 8888</a>
                     </div>
                   </div>
@@ -174,7 +180,7 @@ export default function ContactPage() {
                       </svg>
                     </div>
                     <div>
-                      <p className="font-medium text-primary-900">{locale === 'en' ? 'Email' : '邮箱'}</p>
+                      <p className="font-medium text-primary-900">{l.emailShort}</p>
                       <a href="mailto:hello@starvoyage.sg" className="text-primary-600 hover:text-primary-700">hello@starvoyage.sg</a>
                     </div>
                   </div>

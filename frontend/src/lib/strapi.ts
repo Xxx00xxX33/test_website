@@ -214,47 +214,7 @@ export async function getHomePage(locale: Locale) {
 export async function getAboutPage(locale: Locale) {
   return fetchStrapi<StrapiResponse<StrapiPageWithBlocks>>('/about-page', {
     locale,
-    populate: {
-      seo: { populate: { metaImage: { fields: ['url', 'width', 'height'] } } },
-      blocks: {
-        on: {
-          'blocks.hero-banner': {
-            populate: {
-              backgroundImage: { fields: ['url', 'alternativeText', 'width', 'height'] },
-              buttons: { populate: '*' },
-            },
-          },
-          'blocks.brand-intro': {
-            populate: { image: { fields: ['url', 'alternativeText', 'width', 'height'] } },
-          },
-          'blocks.service-highlights': {
-            populate: { features: { populate: { image: { fields: ['url', 'alternativeText'] } } } },
-          },
-          'blocks.image-text': {
-            populate: {
-              image: { fields: ['url', 'alternativeText', 'width', 'height'] },
-              buttons: { populate: '*' },
-            },
-          },
-          'blocks.testimonials-section': {
-            populate: { testimonials: { populate: { avatar: { fields: ['url'] } } } },
-          },
-          'blocks.gallery-video': {
-            populate: {
-              images: { fields: ['url', 'alternativeText', 'width', 'height'] },
-              video: { fields: ['url'] },
-            },
-          },
-          'blocks.multi-column': {
-            populate: { columns: { populate: { image: { fields: ['url', 'alternativeText'] } } } },
-          },
-          'blocks.rich-text': { populate: '*' },
-          'blocks.contact-cta': {
-            populate: { backgroundImage: { fields: ['url'] }, buttons: { populate: '*' } },
-          },
-        },
-      },
-    },
+    populate: '*',
   });
 }
 
@@ -265,45 +225,7 @@ export async function getServicesPage(locale: Locale) {
 export async function getServicesPageData(locale: Locale) {
   return fetchStrapi<StrapiResponse<StrapiPageWithBlocks>>('/services-page', {
     locale,
-    populate: {
-      seo: { populate: { metaImage: { fields: ['url', 'width', 'height'] } } },
-      blocks: {
-        on: {
-          'blocks.hero-banner': {
-            populate: {
-              backgroundImage: { fields: ['url', 'alternativeText', 'width', 'height'] },
-              buttons: { populate: '*' },
-            },
-          },
-          'blocks.brand-intro': {
-            populate: { image: { fields: ['url', 'alternativeText', 'width', 'height'] } },
-          },
-          'blocks.service-highlights': {
-            populate: { features: { populate: { image: { fields: ['url', 'alternativeText'] } } } },
-          },
-          'blocks.process-steps': { populate: { steps: { populate: '*' } } },
-          'blocks.image-text': {
-            populate: {
-              image: { fields: ['url', 'alternativeText', 'width', 'height'] },
-              buttons: { populate: '*' },
-            },
-          },
-          'blocks.multi-column': {
-            populate: { columns: { populate: { image: { fields: ['url', 'alternativeText'] } } } },
-          },
-          'blocks.rich-text': { populate: '*' },
-          'blocks.contact-cta': {
-            populate: { backgroundImage: { fields: ['url'] }, buttons: { populate: '*' } },
-          },
-          'blocks.gallery-video': {
-            populate: {
-              images: { fields: ['url', 'alternativeText', 'width', 'height'] },
-              video: { fields: ['url'] },
-            },
-          },
-        },
-      },
-    },
+    populate: '*',
   });
 }
 
@@ -402,9 +324,7 @@ export async function getLegalPages(locale: Locale) {
 export async function getLegalPageBySlug(locale: Locale, slug: string) {
   return fetchStrapi<StrapiListResponse<StrapiLegalPage>>('/legal-pages', {
     locale,
-    populate: {
-      seo: { populate: { metaImage: { fields: ['url', 'width', 'height'] } } },
-    },
+    populate: '*',
     filters: { slug: { $eq: slug } },
   });
 }

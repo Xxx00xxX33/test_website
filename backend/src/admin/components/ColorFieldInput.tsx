@@ -2,8 +2,8 @@ import * as React from 'react';
 import { useIntl } from 'react-intl';
 
 type IntlMessage = {
-  id: string;
-  defaultMessage: string;
+  id?: string;
+  defaultMessage?: string;
   values?: Record<string, unknown>;
 };
 
@@ -23,6 +23,11 @@ type InputProps = {
 };
 
 const DEFAULT_COLOR = '#ee7a1b';
+const FIELD_LABELS: Record<string, string> = {
+  primaryColor: '主品牌色',
+  warmColor: '暖色背景',
+  accentColor: '强调色',
+};
 const FIELD_HELPERS: Record<string, string> = {
   primaryColor: '用于按钮、链接、标题等主品牌视觉。',
   warmColor: '用于浅色背景、柔和卡片和暖色氛围区域。',
@@ -55,19 +60,30 @@ function getFieldKey(name: string) {
   return segments[segments.length - 1] || name;
 }
 
-function formatIntlMessage(
+function getMessageText(
   formatMessage: ReturnType<typeof useIntl>['formatMessage'],
   message?: IntlMessage | string,
+  fallback = '',
 ) {
   if (!message) {
-    return '';
+    return fallback;
   }
 
   if (typeof message === 'string') {
     return message;
   }
 
-  return formatMessage(message, message.values);
+  if (message.id) {
+    return formatMessage(
+      {
+        id: message.id,
+        defaultMessage: message.defaultMessage,
+      },
+      message.values,
+    );
+  }
+
+  return message.defaultMessage || fallback;
 }
 
 const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
@@ -92,11 +108,11 @@ const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, r
   }, [value]);
 
   const fieldKey = getFieldKey(name);
-  const helperText = formatIntlMessage(formatMessage, description) || FIELD_HELPERS[fieldKey] || '';
-  const label = formatMessage(intlLabel);
-  const placeholderText = formatIntlMessage(formatMessage, placeholder) || '#ee7a1b';
+  const helperText = getMessageText(formatMessage, description, FIELD_HELPERS[fieldKey] || '');
+  const label = getMessageText(formatMessage, intlLabel, FIELD_LABELS[fieldKey] || fieldKey);
+  const placeholderText = getMessageText(formatMessage, placeholder, '#ee7a1b');
   const normalizedColor = normalizeHexColor(draft) || normalizeHexColor(value) || DEFAULT_COLOR;
-  const errorText = validationMessage || formatIntlMessage(formatMessage, error);
+  const errorText = validationMessage || getMessageText(formatMessage, error);
 
   const commitValue = (nextValue: string) => {
     onChange({

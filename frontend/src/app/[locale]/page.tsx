@@ -1,11 +1,15 @@
 import type { Metadata } from 'next';
-import { isValidLocale, type Locale, locales, strapiLocaleMap } from '@/lib/i18n';
-import { getHomePage } from '@/lib/strapi';
+import { isValidLocale, type Locale } from '@/lib/i18n';
+import { getHomePage, type StrapiPageWithBlocks } from '@/lib/strapi';
 import { getFallbackHomePage } from '@/lib/fallback-data';
 import BlockRenderer from '@/components/blocks/BlockRenderer';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+}
+
+function hasRenderableBlocks(page: StrapiPageWithBlocks | null | undefined): page is StrapiPageWithBlocks {
+  return Array.isArray(page?.blocks) && page.blocks.length > 0;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -49,8 +53,10 @@ export default async function HomePage({ params }: PageProps) {
   if (!isValidLocale(locale)) return null;
 
   const typedLocale = locale as Locale;
+  const fallbackPage = getFallbackHomePage(typedLocale);
   const res = await getHomePage(typedLocale);
-  const page = res?.data || getFallbackHomePage(typedLocale);
+  const page = res?.data;
+  const blocks = hasRenderableBlocks(page) ? page.blocks : fallbackPage.blocks;
 
-  return <BlockRenderer blocks={page.blocks} locale={typedLocale} />;
+  return <BlockRenderer blocks={blocks} locale={typedLocale} />;
 }

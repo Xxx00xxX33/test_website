@@ -1,10 +1,13 @@
 import { strapiLocaleMap, type Locale } from './i18n';
+import type { StrapiThemePalette } from './theme';
 
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN || '';
+const SIMPLIFIED_CHINESE_LOCALE_CANDIDATES = ['zh-Hans', 'zh-CN'] as const;
 
 interface StrapiRequestOptions {
   locale?: Locale;
+  strapiLocale?: string;
   populate?: string | Record<string, unknown>;
   filters?: Record<string, unknown>;
   sort?: string | string[];
@@ -12,16 +15,106 @@ interface StrapiRequestOptions {
   fields?: string[];
 }
 
-async function fetchStrapi<T>(
+function getLocaleCandidates(locale?: Locale, strapiLocale?: string): string[] {
+  if (strapiLocale) {
+    return [strapiLocale];
+  }
+
+  if (!locale) {
+    return [];
+  }
+
+  if (locale === 'zh-hans') {
+    return [...SIMPLIFIED_CHINESE_LOCALE_CANDIDATES];
+  }
+
+  return [strapiLocaleMap[locale]];
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function hasDataProperty(value: unknown): value is Record<string, unknown> & { data: unknown } {
+  return isPlainObject(value) && 'data' in value;
+}
+
+function mergePreferPrimary(primary: unknown, fallback: unknown): unknown {
+  if (primary === null || primary === undefined) {
+    return fallback;
+  }
+
+  if (fallback === null || fallback === undefined) {
+    return primary;
+  }
+
+  if (Array.isArray(primary) && Array.isArray(fallback)) {
+    return primary.length > 0 ? primary : fallback;
+  }
+
+  if (typeof primary === 'string' && typeof fallback === 'string') {
+    return primary.trim() ? primary : fallback;
+  }
+
+  if (isPlainObject(primary) && isPlainObject(fallback)) {
+    const merged: Record<string, unknown> = { ...fallback };
+    const keys = new Set([...Object.keys(fallback), ...Object.keys(primary)]);
+
+    for (const key of keys) {
+      merged[key] = mergePreferPrimary(primary[key], fallback[key]);
+    }
+
+    return merged;
+  }
+
+  return primary;
+}
+
+function mergeStrapiResponses<T>(primary: Awaited<T> | null, fallback: Awaited<T> | null): Awaited<T> | null {
+  if (!primary) {
+    return fallback;
+  }
+
+  if (!fallback) {
+    return primary;
+  }
+
+  if (!hasDataProperty(primary) || !hasDataProperty(fallback)) {
+    return primary;
+  }
+
+  const primaryData = primary.data;
+  const fallbackData = fallback.data;
+
+  if (Array.isArray(primaryData) && Array.isArray(fallbackData)) {
+    return {
+      ...fallback,
+      ...primary,
+      data: primaryData.length > 0 ? primaryData : fallbackData,
+    } as Awaited<T>;
+  }
+
+  if (isPlainObject(primaryData) && isPlainObject(fallbackData)) {
+    return {
+      ...fallback,
+      ...primary,
+      data: mergePreferPrimary(primaryData, fallbackData),
+    } as Awaited<T>;
+  }
+
+  return primary;
+}
+
+async function requestStrapi<T>(
   path: string,
   options: StrapiRequestOptions = {},
-): Promise<T | null> {
-  const { locale, populate, filters, sort, pagination, fields } = options;
+): Promise<Awaited<T> | null> {
+  const { strapiLocale, populate, filters, sort, pagination, fields } = options;
 
   const params = new URLSearchParams();
 
-  if (locale) {
-    params.set('locale', strapiLocaleMap[locale]);
+  if (strapiLocale) {
+    params.set('locale', strapiLocale);
   }
 
   if (populate) {
@@ -75,11 +168,36 @@ async function fetchStrapi<T>(
     }
 
     const json = await res.json();
-    return json as T;
+    return json as Awaited<T>;
   } catch (error) {
     console.error(`Failed to fetch from Strapi: ${url}`, error);
     return null;
   }
+}
+
+async function fetchStrapi<T>(
+  path: string,
+  options: StrapiRequestOptions = {},
+): Promise<Awaited<T> | null> {
+  const { locale, strapiLocale, ...rest } = options;
+  const localeCandidates = getLocaleCandidates(locale, strapiLocale);
+
+  if (localeCandidates.length === 0) {
+    return requestStrapi<T>(path, rest);
+  }
+
+  let mergedResponse: Awaited<T> | null = null;
+
+  for (const candidate of localeCandidates) {
+    const response = await requestStrapi<T>(path, {
+      ...rest,
+      strapiLocale: candidate,
+    });
+
+    mergedResponse = mergedResponse === null ? response : mergeStrapiResponses(mergedResponse, response);
+  }
+
+  return mergedResponse;
 }
 
 function flattenParams(
@@ -119,6 +237,7 @@ export async function getSiteSettings(locale: Locale) {
       favicon: { fields: ['url'] },
       socialLinks: { populate: '*' },
       defaultSeo: { populate: { metaImage: { fields: ['url', 'width', 'height'] } } },
+      themePalette: { populate: '*' },
     },
   });
 }
@@ -133,9 +252,78 @@ export async function getNavigation(locale: Locale) {
   });
 }
 
-export async function getHomePage(locale: Locale) {
-  return fetchStrapi<StrapiResponse<StrapiPageWithBlocks>>('/home-page', {
-    locale,
+const homePagePopulate = {
+  seo: { populate: { metaImage: { fields: ['url', 'width', 'height'] } } },
+  blocks: {
+    on: {
+      'blocks.hero-banner': {
+        populate: {
+          backgroundImage: { fields: ['url', 'alternativeText', 'width', 'height'] },
+          backgroundVideo: { fields: ['url'] },
+          buttons: { populate: '*' },
+        },
+      },
+      'blocks.brand-intro': {
+        populate: {
+          image: { fields: ['url', 'alternativeText', 'width', 'height'] },
+        },
+      },
+      'blocks.service-highlights': {
+        populate: {
+          features: {
+            populate: {
+              image: { fields: ['url', 'alternativeText', 'width', 'height'] },
+            },
+          },
+        },
+      },
+      'blocks.process-steps': {
+        populate: { steps: { populate: '*' } },
+      },
+      'blocks.featured-destinations': { populate: '*' },
+      'blocks.image-text': {
+        populate: {
+          image: { fields: ['url', 'alternativeText', 'width', 'height'] },
+          buttons: { populate: '*' },
+        },
+      },
+      'blocks.testimonials-section': {
+        populate: {
+          testimonials: {
+            populate: {
+              avatar: { fields: ['url', 'alternativeText'] },
+            },
+          },
+        },
+      },
+      'blocks.faq-section': {
+        populate: { items: { populate: '*' } },
+      },
+      'blocks.contact-cta': {
+        populate: {
+          backgroundImage: { fields: ['url', 'alternativeText', 'width', 'height'] },
+          buttons: { populate: '*' },
+        },
+      },
+      'blocks.gallery-video': {
+        populate: {
+          images: { fields: ['url', 'alternativeText', 'width', 'height'] },
+          video: { fields: ['url'] },
+        },
+      },
+      'blocks.multi-column': {
+        populate: {
+          columns: {
+            populate: {
+              image: { fields: ['url', 'alternativeText', 'width', 'height'] },
+            },
+          },
+        },
+      },
+      'blocks.rich-text': { populate: '*' },
+    },
+  },
+  localizations: {
     populate: {
       seo: { populate: { metaImage: { fields: ['url', 'width', 'height'] } } },
       blocks: {
@@ -208,7 +396,51 @@ export async function getHomePage(locale: Locale) {
         },
       },
     },
+  },
+};
+
+function hasRenderableBlocks(page: StrapiPageWithBlocks | null | undefined): boolean {
+  return Array.isArray(page?.blocks) && page.blocks.length > 0;
+}
+
+function resolveSimplifiedChineseHomePage(
+  response: StrapiResponse<StrapiPageWithBlocks> | null,
+): StrapiResponse<StrapiPageWithBlocks> | null {
+  const page = response?.data;
+
+  if (!page) {
+    return response;
+  }
+
+  const zhCnLocalization = page.localizations?.find(
+    (localization): localization is StrapiPageWithBlocks => localization.locale === 'zh-CN',
+  );
+
+  if (!zhCnLocalization) {
+    return response;
+  }
+
+  return {
+    ...response,
+    data: {
+      ...page,
+      seo: page.seo ?? zhCnLocalization.seo,
+      blocks: hasRenderableBlocks(page) ? page.blocks : zhCnLocalization.blocks,
+    },
+  };
+}
+
+export async function getHomePage(locale: Locale) {
+  const response = await fetchStrapi<StrapiResponse<StrapiPageWithBlocks>>('/home-page', {
+    locale,
+    populate: homePagePopulate,
   });
+
+  if (locale !== 'zh-hans') {
+    return response;
+  }
+
+  return resolveSimplifiedChineseHomePage(response);
 }
 
 export async function getAboutPage(locale: Locale) {
@@ -219,7 +451,7 @@ export async function getAboutPage(locale: Locale) {
 }
 
 export async function getServicesPage(locale: Locale) {
-  return getAboutPage(locale); // Same populate structure
+  return getServicesPageData(locale);
 }
 
 export async function getServicesPageData(locale: Locale) {
@@ -378,6 +610,7 @@ export interface StrapiSiteSettings {
     label?: string;
   }>;
   defaultSeo?: StrapiSeo;
+  themePalette?: StrapiThemePalette;
   footerText?: string;
   copyrightText?: string;
 }
@@ -403,8 +636,10 @@ export interface StrapiBlock {
 
 export interface StrapiPageWithBlocks {
   id: number;
+  locale?: string;
   seo?: StrapiSeo;
   blocks: StrapiBlock[];
+  localizations?: StrapiPageWithBlocks[];
 }
 
 export interface StrapiDestination {

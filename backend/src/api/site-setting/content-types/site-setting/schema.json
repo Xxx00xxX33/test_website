@@ -109,6 +109,16 @@
         }
       }
     },
+    "themePalette": {
+      "type": "component",
+      "repeatable": false,
+      "component": "shared.theme-palette",
+      "pluginOptions": {
+        "i18n": {
+          "localized": false
+        }
+      }
+    },
     "footerText": {
       "type": "text",
       "pluginOptions": {

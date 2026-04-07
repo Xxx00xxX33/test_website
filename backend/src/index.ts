@@ -1,7 +1,16 @@
 import type { Core } from '@strapi/strapi';
 
 export default {
-  register(/* { strapi }: { strapi: Core.Strapi } */) {},
+  register({ strapi }: { strapi: Core.Strapi }) {
+    strapi.customFields.register({
+      name: 'color',
+      type: 'string',
+      inputSize: {
+        default: 6,
+        isResizable: true,
+      },
+    });
+  },
 
   async bootstrap({ strapi }: { strapi: Core.Strapi }) {
     // Set up public permissions for content API

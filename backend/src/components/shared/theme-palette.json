@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_shared_theme_palettes",
+  "info": {
+    "displayName": "主题配色",
+    "icon": "paint",
+    "description": "用于控制前台主色、暖色背景和强调色"
+  },
+  "attributes": {
+    "primaryColor": {
+      "type": "customField",
+      "customField": "global::color",
+      "default": "#ee7a1b"
+    },
+    "warmColor": {
+      "type": "customField",
+      "customField": "global::color",
+      "default": "#d88840"
+    },
+    "accentColor": {
+      "type": "customField",
+      "customField": "global::color",
+      "default": "#399067"
+    }
+  }
+}

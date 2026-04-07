@@ -1,14 +1,12 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { isValidLocale, locales, strapiLocaleMap, type Locale } from '@/lib/i18n';
+import { isValidLocale, type Locale } from '@/lib/i18n';
 import { getSiteSettings, getNavigation } from '@/lib/strapi';
+import { buildThemeCssVariables } from '@/lib/theme';
 import { getFallbackSiteSettings, getFallbackNavigation } from '@/lib/fallback-data';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
-export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }));
-}
+export const dynamic = 'force-dynamic';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,6 +30,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
 
   const settings = settingsRes?.data || getFallbackSiteSettings(typedLocale);
   const navigation = navRes?.data || getFallbackNavigation(typedLocale);
+  const themeVariables = buildThemeCssVariables(settings.themePalette);
 
   const langMap: Record<string, string> = {
     'zh-hans': 'zh-Hans',
@@ -41,7 +40,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
 
   return (
     <html lang={langMap[locale] || 'en'} suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col bg-warm-50 text-gray-800 antialiased">
+      <body style={themeVariables} className="min-h-screen flex flex-col bg-warm-50 text-gray-800 antialiased">
         <Header locale={typedLocale} settings={settings} navigation={navigation} />
         <main className="flex-1">{children}</main>
         <Footer locale={typedLocale} settings={settings} navigation={navigation} />

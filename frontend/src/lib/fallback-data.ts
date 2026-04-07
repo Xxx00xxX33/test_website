@@ -204,3 +204,41 @@ export function getFallbackFaqs(locale: Locale): StrapiFaq[] {
 export function getFallbackDestinationBySlug(locale: Locale, slug: string): StrapiDestination | null {
   return destinations[locale].find((d) => d.slug === slug) || null;
 }
+
+
+const contactPages: Record<Locale, StrapiContactPage> = {
+  'zh-hans': {
+    id: 1,
+    title: '联系我们',
+    description: '无论您有任何旅行想法或疑问，都欢迎联系我们。我们会在24小时内回复您。',
+    formTitle: '发送咨询',
+    formDescription: '请填写下面的表单，我们会尽快与您联系。',
+    formSuccessMessage: '感谢您的咨询！我们会尽快与您联系。',
+    mapEmbedUrl: '',
+    blocks: [],
+  },
+  'zh-hant': {
+    id: 1,
+    title: '聯繫我們',
+    description: '無論您有任何旅行想法或疑問，都歡迎聯繫我們。',
+    formTitle: '發送諮詢',
+    formDescription: '請填寫下面的表單，我們會盡快與您聯繫。',
+    formSuccessMessage: '感謝您的諮詢！我們會盡快與您聯繫。',
+    mapEmbedUrl: '',
+    blocks: [],
+  },
+  en: {
+    id: 1,
+    title: 'Contact Us',
+    description: 'Whether you have travel ideas or questions, feel free to reach out. We will respond within 24 hours.',
+    formTitle: 'Send an Inquiry',
+    formDescription: 'Fill in the form below and our team will get back to you soon.',
+    formSuccessMessage: 'Thank you for your inquiry! We will get back to you soon.',
+    mapEmbedUrl: '',
+    blocks: [],
+  },
+};
+
+export function getFallbackContactPage(locale: Locale): StrapiContactPage {
+  return contactPages[locale] || contactPages['zh-hans'];
+}

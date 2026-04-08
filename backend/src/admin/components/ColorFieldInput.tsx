@@ -22,17 +22,63 @@ type InputProps = {
   value?: string | null;
 };
 
+type MessageDescriptor = {
+  id: string;
+  defaultMessage: string;
+  values?: Record<string, unknown>;
+};
+
 const DEFAULT_COLOR = '#ee7a1b';
-const FIELD_LABELS: Record<string, string> = {
-  primaryColor: '主品牌色',
-  warmColor: '暖色背景',
-  accentColor: '强调色',
+const FIELD_LABEL_MESSAGES: Record<string, MessageDescriptor> = {
+  primaryColor: {
+    id: 'themePalette.field.primaryColor.label',
+    defaultMessage: 'Primary color',
+  },
+  warmColor: {
+    id: 'themePalette.field.warmColor.label',
+    defaultMessage: 'Warm background',
+  },
+  accentColor: {
+    id: 'themePalette.field.accentColor.label',
+    defaultMessage: 'Accent color',
+  },
 };
-const FIELD_HELPERS: Record<string, string> = {
-  primaryColor: '用于按钮、链接、标题等主品牌视觉。',
-  warmColor: '用于浅色背景、柔和卡片和暖色氛围区域。',
-  accentColor: '用于强调信息、点缀色和辅助高亮。',
+const FIELD_HELPER_MESSAGES: Record<string, MessageDescriptor> = {
+  primaryColor: {
+    id: 'themePalette.field.primaryColor.description',
+    defaultMessage: 'Used for buttons, links, headings, and other primary brand accents.',
+  },
+  warmColor: {
+    id: 'themePalette.field.warmColor.description',
+    defaultMessage: 'Used for light backgrounds, soft cards, and warm atmosphere sections.',
+  },
+  accentColor: {
+    id: 'themePalette.field.accentColor.description',
+    defaultMessage: 'Used for highlighted information, accent details, and supporting emphasis.',
+  },
 };
+const UI_MESSAGES = {
+  required: {
+    id: 'themePalette.input.required',
+    defaultMessage: 'This color field cannot be empty.',
+  },
+  invalidHex: {
+    id: 'themePalette.input.invalidHex',
+    defaultMessage: 'Please enter a valid HEX color, such as #ee7a1b.',
+  },
+  currentValue: {
+    id: 'themePalette.input.currentValue',
+    defaultMessage: 'Current value',
+  },
+  supportedFormat: {
+    id: 'themePalette.input.supportedFormat',
+    defaultMessage: 'Supports 3-digit or 6-digit HEX values',
+  },
+  colorPanelAria: {
+    id: 'themePalette.input.colorPanelAria',
+    defaultMessage: '{label} color panel',
+  },
+} satisfies Record<string, MessageDescriptor>;
 
 function normalizeHexColor(value?: string | null): string | null {
   if (!value) {
@@ -108,11 +154,33 @@ const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, r
   }, [value]);
 
   const fieldKey = getFieldKey(name);
-  const helperText = getMessageText(formatMessage, description, FIELD_HELPERS[fieldKey] || '');
-  const label = getMessageText(formatMessage, intlLabel, FIELD_LABELS[fieldKey] || fieldKey);
+  const localizedFieldLabel = getMessageText(
+    formatMessage,
+    FIELD_LABEL_MESSAGES[fieldKey],
+    fieldKey,
+  );
+  const localizedFieldHelper = getMessageText(
+    formatMessage,
+    FIELD_HELPER_MESSAGES[fieldKey],
+    '',
+  );
+  const helperText = getMessageText(formatMessage, description, localizedFieldHelper);
+  const label = getMessageText(formatMessage, intlLabel, localizedFieldLabel);
   const placeholderText = getMessageText(formatMessage, placeholder, '#ee7a1b');
   const normalizedColor = normalizeHexColor(draft) || normalizeHexColor(value) || DEFAULT_COLOR;
   const errorText = validationMessage || getMessageText(formatMessage, error);
+  const requiredMessage = getMessageText(formatMessage, UI_MESSAGES.required);
+  const invalidHexMessage = getMessageText(formatMessage, UI_MESSAGES.invalidHex);
+  const currentValueLabel = getMessageText(formatMessage, UI_MESSAGES.currentValue);
+  const supportedFormatLabel = getMessageText(formatMessage, UI_MESSAGES.supportedFormat);
+  const colorPanelLabel = getMessageText(
+    formatMessage,
+    {
+      ...UI_MESSAGES.colorPanelAria,
+      values: { label },
+    },
+    `${label} color panel`,
+  );
 
   const commitValue = (nextValue: string) => {
     onChange({
@@ -143,14 +211,14 @@ const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, r
     }
 
     if (nextValue.trim() === '') {
-      setValidationMessage(required ? '该颜色字段不能为空。' : '');
+      setValidationMessage(required ? requiredMessage : '');
       if (!required) {
         commitValue('');
       }
       return;
     }
 
-    setValidationMessage('请输入有效的 HEX 颜色，例如 #ee7a1b。');
+    setValidationMessage(invalidHexMessage);
   };
 
   const handleTextBlur = () => {
@@ -170,7 +238,7 @@ const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, r
     const fallbackValue = value ?? '';
     setDraft(fallbackValue);
     if (!normalizeHexColor(draft)) {
-      setValidationMessage('请输入有效的 HEX 颜色，例如 #ee7a1b。');
+      setValidationMessage(invalidHexMessage);
     }
   };
 
@@ -197,7 +265,7 @@ const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, r
           type="color"
           value={normalizedColor}
           disabled={disabled}
-          aria-label={`${label}颜色面板`}
+          aria-label={colorPanelLabel}
           onChange={handleColorChange}
           style={{
             width: '3rem',
@@ -248,8 +316,8 @@ const ColorFieldInput = React.forwardRef<HTMLInputElement, InputProps>((props, r
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', fontSize: '0.75rem' }}>
-        <span style={{ color: '#666687' }}>当前值：{normalizedColor}</span>
-        <span style={{ color: '#666687' }}>支持 3 位或 6 位 HEX 格式</span>
+        <span style={{ color: '#666687' }}>{currentValueLabel}: {normalizedColor}</span>
+        <span style={{ color: '#666687' }}>{supportedFormatLabel}</span>
       </div>
 
       {errorText ? <p style={{ margin: 0, fontSize: '0.8125rem', color: '#d02b20' }}>{errorText}</p> : null}

@@ -4,8 +4,8 @@
   "info": {
     "singularName": "navigation",
     "pluralName": "navigations",
-    "displayName": "导航菜单",
-    "description": "网站导航配置"
+    "displayName": "Navigation",
+    "description": "Website navigation configuration"
   },
   "options": {
     "draftAndPublish": false

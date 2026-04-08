@@ -4,8 +4,8 @@
   "info": {
     "singularName": "legal-page",
     "pluralName": "legal-pages",
-    "displayName": "法务页面",
-    "description": "法务页面，如隐私政策、条款、免责声明"
+    "displayName": "Legal Page",
+    "description": "Legal pages such as privacy policy, terms, disclaimer"
   },
   "options": {
     "draftAndPublish": true

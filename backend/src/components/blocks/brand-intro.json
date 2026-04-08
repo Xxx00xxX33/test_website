@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_brand_intros",
   "info": {
-    "displayName": "品牌介绍",
+    "displayName": "Brand Introduction",
     "icon": "information",
-    "description": "品牌故事与价值主张区块"
+    "description": "Brand story and value proposition block"
   },
   "attributes": {
     "heading": {

@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_cta_buttons",
   "info": {
-    "displayName": "行动按钮",
+    "displayName": "CTA Button",
     "icon": "cursor",
-    "description": "行动号召按钮"
+    "description": "Call-to-action button"
   },
   "attributes": {
     "text": {

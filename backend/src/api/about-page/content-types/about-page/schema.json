@@ -4,8 +4,8 @@
   "info": {
     "singularName": "about-page",
     "pluralName": "about-pages",
-    "displayName": "关于我们",
-    "description": "关于我们页面内容"
+    "displayName": "About Page",
+    "description": "About page content"
   },
   "options": {
     "draftAndPublish": true

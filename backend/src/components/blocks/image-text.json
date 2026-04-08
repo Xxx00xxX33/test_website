@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_image_texts",
   "info": {
-    "displayName": "图文模块",
+    "displayName": "Image & Text",
     "icon": "landscape",
-    "description": "图片与文字并排展示区块"
+    "description": "Image and text side-by-side block"
   },
   "attributes": {
     "heading": {

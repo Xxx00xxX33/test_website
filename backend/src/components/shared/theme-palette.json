@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_theme_palettes",
   "info": {
-    "displayName": "主题配色",
+    "displayName": "Theme Palette",
     "icon": "paint",
-    "description": "用于控制前台主色、暖色背景和强调色"
+    "description": "Theme color palette configuration"
   },
   "attributes": {
     "primaryColor": {

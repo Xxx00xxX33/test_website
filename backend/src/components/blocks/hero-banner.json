@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_hero_banners",
   "info": {
-    "displayName": "主横幅",
+    "displayName": "Hero Banner",
     "icon": "picture",
-    "description": "全宽主横幅，含标题、副标题和行动按钮"
+    "description": "Full-width hero banner with title, subtitle and CTA buttons"
   },
   "attributes": {
     "title": {

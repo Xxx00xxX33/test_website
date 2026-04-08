@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_gallery_videos",
   "info": {
-    "displayName": "图库/视频",
+    "displayName": "Gallery / Video",
     "icon": "picture",
-    "description": "图片画廊或视频展示区块"
+    "description": "Image gallery or video showcase block"
   },
   "attributes": {
     "heading": {

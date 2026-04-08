@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_contact_ctas",
   "info": {
-    "displayName": "联系行动号召",
+    "displayName": "Contact CTA",
     "icon": "phone",
-    "description": "联系引导行动区块"
+    "description": "Contact call-to-action block"
   },
   "attributes": {
     "heading": {

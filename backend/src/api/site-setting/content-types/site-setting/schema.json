@@ -4,8 +4,8 @@
   "info": {
     "singularName": "site-setting",
     "pluralName": "site-settings",
-    "displayName": "网站设置",
-    "description": "全局网站配置"
+    "displayName": "Site Settings",
+    "description": "Global site configuration"
   },
   "options": {
     "draftAndPublish": false

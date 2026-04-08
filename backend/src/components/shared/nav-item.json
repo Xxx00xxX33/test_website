@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_nav_items",
   "info": {
-    "displayName": "导航项",
+    "displayName": "Nav Item",
     "icon": "bulletList",
-    "description": "导航菜单项"
+    "description": "Navigation menu item"
   },
   "attributes": {
     "label": {

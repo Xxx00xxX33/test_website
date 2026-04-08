@@ -4,8 +4,8 @@
   "info": {
     "singularName": "contact-page",
     "pluralName": "contact-pages",
-    "displayName": "联系我们",
-    "description": "联系我们页面内容"
+    "displayName": "Contact Page",
+    "description": "Contact page content"
   },
   "options": {
     "draftAndPublish": true

@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_feature_items",
   "info": {
-    "displayName": "特色项",
+    "displayName": "Feature Item",
     "icon": "star",
-    "description": "含图标、标题和描述的特色项"
+    "description": "Feature item with icon, title and description"
   },
   "attributes": {
     "icon": {

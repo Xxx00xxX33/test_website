@@ -4,8 +4,8 @@
   "info": {
     "singularName": "destination",
     "pluralName": "destinations",
-    "displayName": "目的地",
-    "description": "旅游目的地与旅行灵感"
+    "displayName": "Destination",
+    "description": "Travel destinations and inspirations"
   },
   "options": {
     "draftAndPublish": true

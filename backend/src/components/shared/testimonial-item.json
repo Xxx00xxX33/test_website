@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_testimonial_items",
   "info": {
-    "displayName": "评价项",
+    "displayName": "Testimonial Item",
     "icon": "quote",
-    "description": "一条客户评价"
+    "description": "A customer testimonial entry"
   },
   "attributes": {
     "name": {

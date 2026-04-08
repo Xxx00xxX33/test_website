@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_column_items",
   "info": {
-    "displayName": "栏目项",
+    "displayName": "Column Item",
     "icon": "layout",
-    "description": "多栏区块中的单栏内容"
+    "description": "Single column content in multi-column block"
   },
   "attributes": {
     "title": {

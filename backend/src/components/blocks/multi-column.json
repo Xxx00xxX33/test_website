@@ -1,9 +1,9 @@
 {
   "collectionName": "components_blocks_multi_columns",
   "info": {
-    "displayName": "多栏布局",
+    "displayName": "Multi Column",
     "icon": "apps",
-    "description": "多栏信息布局"
+    "description": "Multi-column information layout"
   },
   "attributes": {
     "heading": {

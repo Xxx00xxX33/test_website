@@ -4,8 +4,8 @@
   "info": {
     "singularName": "faq",
     "pluralName": "faqs",
-    "displayName": "常见问题",
-    "description": "常见问题解答"
+    "displayName": "FAQ",
+    "description": "Frequently asked questions"
   },
   "options": {
     "draftAndPublish": true

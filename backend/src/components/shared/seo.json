@@ -1,9 +1,9 @@
 {
   "collectionName": "components_shared_seo",
   "info": {
-    "displayName": "SEO设置",
+    "displayName": "SEO",
     "icon": "search",
-    "description": "页面SEO元数据"
+    "description": "Page SEO metadata"
   },
   "attributes": {
     "metaTitle": {

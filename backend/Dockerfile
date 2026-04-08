@@ -9,7 +9,8 @@ ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 COPY package.json package-lock.json ./
-RUN npm install
+COPY patches ./patches
+RUN npm install --include=dev
 
 COPY . .
 ENV NODE_OPTIONS=--max-old-space-size=4096

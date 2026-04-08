@@ -1,0 +1,56 @@
+diff --git a/node_modules/@strapi/upload/dist/admin/components/AssetDialog/BrowseStep/BrowseStep.js b/node_modules/@strapi/upload/dist/admin/components/AssetDialog/BrowseStep/BrowseStep.js
+index 364f2ea..14a74d4 100644
+--- a/node_modules/@strapi/upload/dist/admin/components/AssetDialog/BrowseStep/BrowseStep.js
++++ b/node_modules/@strapi/upload/dist/admin/components/AssetDialog/BrowseStep/BrowseStep.js
+@@ -44,7 +44,22 @@ const ActionContainer = styledComponents.styled(designSystem.Box)`
+   }
+ `;
+ const BrowseStep = ({ allowedTypes = [], assets: rawAssets, canCreate, canRead, folders = [], multiple = false, onAddAsset, onChangeFilters, onChangePage, onChangePageSize, onChangeSearch, onChangeSort, onChangeFolder, onEditAsset, onEditFolder, onSelectAllAsset, onSelectAsset, pagination, queryObject, selectedAssets })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale } = reactIntl.useIntl();
++    const getViewSwitchLabel = (nextView)=>{
++        if (locale === 'zh') {
++            return nextView === constants.viewOptions.LIST ? '列表檢視' : '網格檢視';
++        }
++        if (locale === 'zh-Hans') {
++            return nextView === constants.viewOptions.LIST ? '列表视图' : '网格视图';
++        }
++        return formatMessage(nextView === constants.viewOptions.LIST ? {
++            id: 'view-switch.list',
++            defaultMessage: 'List View'
++        } : {
++            id: 'view-switch.grid',
++            defaultMessage: 'Grid View'
++        });
++    };
+     const [view, setView] = usePersistentState.usePersistentState(constants.localStorageKeys.modalView, constants.viewOptions.GRID);
+     const isGridView = view === constants.viewOptions.GRID;
+     const { data: currentFolder, isLoading: isCurrentFolderLoading } = useFolder.useFolder(queryObject?.folder, {
+@@ -118,13 +133,7 @@ const BrowseStep = ({ allowedTypes = [], assets: rawAssets, canCreate, canRead,
+                                     paddingTop: 1,
+                                     paddingBottom: 1,
+                                     children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.IconButton, {
+-                                        label: isGridView ? formatMessage({
+-                                            id: 'view-switch.list',
+-                                            defaultMessage: 'List View'
+-                                        }) : formatMessage({
+-                                            id: 'view-switch.grid',
+-                                            defaultMessage: 'Grid View'
+-                                        }),
++                                        label: getViewSwitchLabel(isGridView ? constants.viewOptions.LIST : constants.viewOptions.GRID),
+                                         onClick: ()=>setView(isGridView ? constants.viewOptions.LIST : constants.viewOptions.GRID),
+                                         children: isGridView ? /*#__PURE__*/ jsxRuntime.jsx(icons.List, {}) : /*#__PURE__*/ jsxRuntime.jsx(icons.GridFour, {})
+                                     })
+diff --git a/node_modules/@strapi/upload/dist/admin/translations/zh.json.js b/node_modules/@strapi/upload/dist/admin/translations/zh.json.js
+index 9dfbc57..90fed50 100644
+--- a/node_modules/@strapi/upload/dist/admin/translations/zh.json.js
++++ b/node_modules/@strapi/upload/dist/admin/translations/zh.json.js
+@@ -76,6 +76,8 @@ var zh = {
+     "modal.header.pending-assets": "素材上傳中",
+     "modal.header.select-files": "選取的檔案",
+     "modal.header.go-back": "返回",
++    "view-switch.list": "列表檢視",
++    "view-switch.grid": "網格檢視",
+     "modal.folder.move.title": "移動元素至",
+     "modal.folder.create.title": "新增資料夾",
+     "modal.folder.create.submit": "新增",

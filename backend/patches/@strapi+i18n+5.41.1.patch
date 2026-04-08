@@ -1,0 +1,586 @@
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js
+index 412cec8..61aa2f3 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js
++++ b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js
+@@ -9,13 +9,14 @@ var qs = require('qs');
+ var reactIntl = require('react-intl');
+ var reactRouterDom = require('react-router-dom');
+ var getTranslation = require('../utils/getTranslation.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
+ var strings = require('../utils/strings.js');
+ 
+ const isErrorMessageDescriptor = (object)=>{
+     return typeof object === 'object' && object !== null && 'id' in object && 'defaultMessage' in object;
+ };
+ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     /**
+    * TODO: Should this be extracted an made into a factory to recursively get
+    * error messages??
+@@ -195,7 +196,7 @@ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationError
+                                             children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.Typography, {
+                                                 variant: "sigma",
+                                                 textColor: "neutral600",
+-                                                children: Array.isArray(localesMetadata) ? localesMetadata.find((localeEntry)=>localeEntry.code === locale)?.name : locale
++                                                children: Array.isArray(localesMetadata) ? localeDisplayNames.getLocalizedLocaleName(localesMetadata.find((localeEntry)=>localeEntry.code === locale), language) : locale
+                                             })
+                                         }),
+                                         /*#__PURE__*/ jsxRuntime.jsx(strapiAdmin.Table.Cell, {
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs
+index e98e3b0..06d74f0 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs
++++ b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs
+@@ -7,13 +7,14 @@ import { stringify } from 'qs';
+ import { useIntl } from 'react-intl';
+ import { Link } from 'react-router-dom';
+ import { getTranslation } from '../utils/getTranslation.mjs';
++import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
+ import { capitalize } from '../utils/strings.mjs';
+ 
+ const isErrorMessageDescriptor = (object)=>{
+     return typeof object === 'object' && object !== null && 'id' in object && 'defaultMessage' in object;
+ };
+ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     /**
+    * TODO: Should this be extracted an made into a factory to recursively get
+    * error messages??
+@@ -193,7 +194,7 @@ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationError
+                                             children: /*#__PURE__*/ jsx(Typography, {
+                                                 variant: "sigma",
+                                                 textColor: "neutral600",
+-                                                children: Array.isArray(localesMetadata) ? localesMetadata.find((localeEntry)=>localeEntry.code === locale)?.name : locale
++                                                children: Array.isArray(localesMetadata) ? getLocalizedLocaleName(localesMetadata.find((localeEntry)=>localeEntry.code === locale), language) : locale
+                                             })
+                                         }),
+                                         /*#__PURE__*/ jsx(Table.Cell, {
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js
+index d743b6e..621c986 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js
++++ b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js
+@@ -19,6 +19,7 @@ var relations = require('../services/relations.js');
+ var settings = require('../services/settings.js');
+ var clean = require('../utils/clean.js');
+ var getTranslation = require('../utils/getTranslation.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
+ var strings = require('../utils/strings.js');
+ var BulkLocaleActionModal = require('./BulkLocaleActionModal.js');
+ 
+@@ -47,7 +48,7 @@ const statusVariants = {
+     modified: 'alternative'
+ };
+ const LocaleOption = ({ isDraftAndPublishEnabled, locale, status, entryExists })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     if (!entryExists) {
+         return formatMessage({
+             id: getTranslation.getTranslation('CMEditViewLocalePicker.locale.create'),
+@@ -56,7 +57,7 @@ const LocaleOption = ({ isDraftAndPublishEnabled, locale, status, entryExists })
+             bold: (locale)=>/*#__PURE__*/ jsxRuntime.jsx("b", {
+                     children: locale
+                 }),
+-            locale: locale.name
++            locale: localeDisplayNames.getLocalizedLocaleName(locale, language)
+         });
+     }
+     return /*#__PURE__*/ jsxRuntime.jsxs(designSystem.Flex, {
+@@ -65,7 +66,7 @@ const LocaleOption = ({ isDraftAndPublishEnabled, locale, status, entryExists })
+         justifyContent: "space-between",
+         children: [
+             /*#__PURE__*/ jsxRuntime.jsx(designSystem.Typography, {
+-                children: locale.name
++                children: localeDisplayNames.getLocalizedLocaleName(locale, language)
+             }),
+             isDraftAndPublishEnabled ? /*#__PURE__*/ jsxRuntime.jsx(designSystem.Status, {
+                 display: "flex",
+@@ -98,7 +99,7 @@ const LocaleOptionStartIcon = ({ entryWithLocaleExists, translationStatus, index
+     return null;
+ };
+ const LocalePickerAction = ({ document, meta, model, collectionType, documentId })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const [{ query }, setQuery] = strapiAdmin.useQueryParams();
+     const { hasI18n, canCreate, canRead } = useI18n.useI18n();
+     const { data: locales$1 = [] } = locales.useGetLocalesQuery();
+@@ -333,7 +334,7 @@ const SpinningLoader = styledComponents.styled(icons.Loader)`
+   animation: spin 2s linear infinite;
+ `;
+ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const isAIAvailable = ee.useAIAvailability();
+     const { data: settings$1 } = settings.useGetSettingsQuery();
+     const isAISettingEnabled = settings$1?.data?.aiLocalizations;
+@@ -428,7 +429,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+ /* -------------------------------------------------------------------------------------------------
+  * FillFromAnotherLocaleAction
+  * -----------------------------------------------------------------------------------------------*/ const FillFromAnotherLocaleAction = ({ documentId, meta, model, collectionType })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const [{ query }] = strapiAdmin.useQueryParams();
+     const { hasI18n } = useI18n.useI18n();
+     const currentDesiredLocale = query.plugins?.i18n?.locale;
+@@ -524,7 +525,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+                                                 onChange: (value)=>setLocaleSelected(value),
+                                                 children: availableLocales.map((locale)=>/*#__PURE__*/ jsxRuntime.jsx(designSystem.SingleSelectOption, {
+                                                         value: locale.code,
+-                                                        children: locale.name
++                                                        children: localeDisplayNames.getLocalizedLocaleName(locale, language)
+                                                     }, locale.code))
+                                             })
+                                         ]
+@@ -566,7 +567,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+ /* -------------------------------------------------------------------------------------------------
+  * DeleteLocaleAction
+  * -----------------------------------------------------------------------------------------------*/ const DeleteLocaleAction = ({ document, documentId, model, collectionType })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const navigate = reactRouterDom.useNavigate();
+     const { toggleNotification } = strapiAdmin.useNotification();
+     const { delete: deleteAction, isLoading } = strapiAdmin$1.unstable_useDocumentActions();
+@@ -589,7 +590,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+             id: getTranslation.getTranslation('actions.delete.label'),
+             defaultMessage: 'Delete entry ({locale})'
+         }, {
+-            locale: locale && locale.name
++            locale: locale ? localeDisplayNames.getLocalizedLocaleName(locale, language) : locale
+         }),
+         icon: /*#__PURE__*/ jsxRuntime.jsx(StyledTrash, {}),
+         variant: 'danger',
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs
+index 2bafd97..dab33f3 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs
++++ b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs
+@@ -17,6 +17,7 @@ import { useGetManyDraftRelationCountQuery } from '../services/relations.mjs';
+ import { useGetSettingsQuery } from '../services/settings.mjs';
+ import { cleanData } from '../utils/clean.mjs';
+ import { getTranslation } from '../utils/getTranslation.mjs';
++import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
+ import { capitalize } from '../utils/strings.mjs';
+ import { BulkLocaleActionModal } from './BulkLocaleActionModal.mjs';
+ 
+@@ -26,7 +27,7 @@ const statusVariants = {
+     modified: 'alternative'
+ };
+ const LocaleOption = ({ isDraftAndPublishEnabled, locale, status, entryExists })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     if (!entryExists) {
+         return formatMessage({
+             id: getTranslation('CMEditViewLocalePicker.locale.create'),
+@@ -35,7 +36,7 @@ const LocaleOption = ({ isDraftAndPublishEnabled, locale, status, entryExists })
+             bold: (locale)=>/*#__PURE__*/ jsx("b", {
+                     children: locale
+                 }),
+-            locale: locale.name
++            locale: getLocalizedLocaleName(locale, language)
+         });
+     }
+     return /*#__PURE__*/ jsxs(Flex, {
+@@ -44,7 +45,7 @@ const LocaleOption = ({ isDraftAndPublishEnabled, locale, status, entryExists })
+         justifyContent: "space-between",
+         children: [
+             /*#__PURE__*/ jsx(Typography, {
+-                children: locale.name
++                children: getLocalizedLocaleName(locale, language)
+             }),
+             isDraftAndPublishEnabled ? /*#__PURE__*/ jsx(Status, {
+                 display: "flex",
+@@ -77,7 +78,7 @@ const LocaleOptionStartIcon = ({ entryWithLocaleExists, translationStatus, index
+     return null;
+ };
+ const LocalePickerAction = ({ document, meta, model, collectionType, documentId })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const [{ query }, setQuery] = useQueryParams();
+     const { hasI18n, canCreate, canRead } = useI18n();
+     const { data: locales = [] } = useGetLocalesQuery();
+@@ -312,7 +313,7 @@ const SpinningLoader = styled(Loader)`
+   animation: spin 2s linear infinite;
+ `;
+ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const isAIAvailable = useAIAvailability();
+     const { data: settings } = useGetSettingsQuery();
+     const isAISettingEnabled = settings?.data?.aiLocalizations;
+@@ -407,7 +408,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+ /* -------------------------------------------------------------------------------------------------
+  * FillFromAnotherLocaleAction
+  * -----------------------------------------------------------------------------------------------*/ const FillFromAnotherLocaleAction = ({ documentId, meta, model, collectionType })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const [{ query }] = useQueryParams();
+     const { hasI18n } = useI18n();
+     const currentDesiredLocale = query.plugins?.i18n?.locale;
+@@ -503,7 +504,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+                                                 onChange: (value)=>setLocaleSelected(value),
+                                                 children: availableLocales.map((locale)=>/*#__PURE__*/ jsx(SingleSelectOption, {
+                                                         value: locale.code,
+-                                                        children: locale.name
++                                                        children: getLocalizedLocaleName(locale, language)
+                                                     }, locale.code))
+                                             })
+                                         ]
+@@ -545,7 +546,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+ /* -------------------------------------------------------------------------------------------------
+  * DeleteLocaleAction
+  * -----------------------------------------------------------------------------------------------*/ const DeleteLocaleAction = ({ document, documentId, model, collectionType })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const navigate = useNavigate();
+     const { toggleNotification } = useNotification();
+     const { delete: deleteAction, isLoading } = unstable_useDocumentActions();
+@@ -568,7 +569,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+             id: getTranslation('actions.delete.label'),
+             defaultMessage: 'Delete entry ({locale})'
+         }, {
+-            locale: locale && locale.name
++            locale: locale ? getLocalizedLocaleName(locale, language) : locale
+         }),
+         icon: /*#__PURE__*/ jsx(StyledTrash, {}),
+         variant: 'danger',
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js
+index 0355f2b..1cd857e 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js
++++ b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js
+@@ -10,6 +10,7 @@ var yup = require('yup');
+ var locales = require('../services/locales.js');
+ var baseQuery = require('../utils/baseQuery.js');
+ var getTranslation = require('../utils/getTranslation.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
+ 
+ function _interopNamespaceDefault(e) {
+   var n = Object.create(null);
+@@ -32,7 +33,7 @@ var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
+ var yup__namespace = /*#__PURE__*/_interopNamespaceDefault(yup);
+ 
+ const CreateLocale = ({ disabled, variant = 'default' })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const [visible, setVisible] = React__namespace.useState(false);
+     return /*#__PURE__*/ jsxRuntime.jsxs(designSystem.Modal.Root, {
+         open: visible,
+@@ -245,7 +246,7 @@ const BaseForm = ({ mode = 'create' })=>{
+         return null;
+     }
+     const options = defaultLocales.map((locale)=>({
+-            label: locale.name,
++            label: localeDisplayNames.getLocalizedLocaleName(locale, language),
+             value: locale.code
+         }));
+     const translatedForm = [
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs
+index 70e5ce3..f45a6b7 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs
++++ b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs
+@@ -8,9 +8,10 @@ import * as yup from 'yup';
+ import { useCreateLocaleMutation, useGetDefaultLocalesQuery } from '../services/locales.mjs';
+ import { isBaseQueryError } from '../utils/baseQuery.mjs';
+ import { getTranslation } from '../utils/getTranslation.mjs';
++import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
+ 
+ const CreateLocale = ({ disabled, variant = 'default' })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const [visible, setVisible] = React.useState(false);
+     return /*#__PURE__*/ jsxs(Modal.Root, {
+         open: visible,
+@@ -223,7 +224,7 @@ const BaseForm = ({ mode = 'create' })=>{
+         return null;
+     }
+     const options = defaultLocales.map((locale)=>({
+-            label: locale.name,
++            label: getLocalizedLocaleName(locale, language),
+             value: locale.code
+         }));
+     const translatedForm = [
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js b/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js
+index f071920..2c4dc43 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js
++++ b/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js
+@@ -8,6 +8,7 @@ var reactIntl = require('react-intl');
+ var reactRouterDom = require('react-router-dom');
+ var locales = require('../services/locales.js');
+ var getTranslation = require('../utils/getTranslation.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
+ 
+ const LocaleListCell = ({ locale: currentLocale, localizations, documentId })=>{
+     const { locale: language, formatMessage } = reactIntl.useIntl();
+@@ -29,7 +30,7 @@ const LocaleListCell = ({ locale: currentLocale, localizations, documentId })=>{
+             return loc === locale.code;
+         });
+         if (createdLocale) {
+-            const name = locale.isDefault ? `${locale.name} (default)` : locale.name;
++            const name = localeDisplayNames.getLocalizedLocaleDisplayName(locale, language);
+             acc.push({
+                 code: locale.code,
+                 name
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.mjs b/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.mjs
+index a80a733..cff5f21 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.mjs
++++ b/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.mjs
+@@ -6,6 +6,7 @@ import { useIntl } from 'react-intl';
+ import { useNavigate } from 'react-router-dom';
+ import { useGetLocalesQuery } from '../services/locales.mjs';
+ import { getTranslation } from '../utils/getTranslation.mjs';
++import { getLocalizedLocaleDisplayName } from '../utils/localeDisplayNames.mjs';
+ 
+ const LocaleListCell = ({ locale: currentLocale, localizations, documentId })=>{
+     const { locale: language, formatMessage } = useIntl();
+@@ -27,7 +28,7 @@ const LocaleListCell = ({ locale: currentLocale, localizations, documentId })=>{
+             return loc === locale.code;
+         });
+         if (createdLocale) {
+-            const name = locale.isDefault ? `${locale.name} (default)` : locale.name;
++            const name = getLocalizedLocaleDisplayName(locale, language);
+             acc.push({
+                 code: locale.code,
+                 name
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.js b/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.js
+index 377d898..8b5eeb7 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.js
++++ b/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.js
+@@ -8,6 +8,7 @@ var reactIntl = require('react-intl');
+ var useI18n = require('../hooks/useI18n.js');
+ var locales = require('../services/locales.js');
+ var getTranslation = require('../utils/getTranslation.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
+ 
+ function _interopNamespaceDefault(e) {
+   var n = Object.create(null);
+@@ -29,7 +30,7 @@ function _interopNamespaceDefault(e) {
+ var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
+ 
+ const LocalePicker = ()=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const [{ query }, setQuery] = strapiAdmin.useQueryParams();
+     const { hasI18n, canRead, canCreate } = useI18n.useI18n();
+     const { data: locales$1 = [] } = locales.useGetLocalesQuery(undefined, {
+@@ -78,7 +79,7 @@ const LocalePicker = ()=>{
+         }) : [];
+         return displayedLocales.sort((a, b)=>a.name.localeCompare(b.name)).map((locale)=>/*#__PURE__*/ jsxRuntime.jsx(designSystem.SingleSelectOption, {
+                 value: locale.code,
+-                children: locale.name
++                children: localeDisplayNames.getLocalizedLocaleName(locale, language)
+             }, locale.id));
+     }, [
+         locales$1,
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.mjs b/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.mjs
+index c41a03f..7da241b 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.mjs
++++ b/node_modules/@strapi/i18n/dist/admin/components/LocalePicker.mjs
+@@ -6,9 +6,10 @@ import { useIntl } from 'react-intl';
+ import { useI18n } from '../hooks/useI18n.mjs';
+ import { useGetLocalesQuery } from '../services/locales.mjs';
+ import { getTranslation } from '../utils/getTranslation.mjs';
++import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
+ 
+ const LocalePicker = ()=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const [{ query }, setQuery] = useQueryParams();
+     const { hasI18n, canRead, canCreate } = useI18n();
+     const { data: locales = [] } = useGetLocalesQuery(undefined, {
+@@ -57,7 +58,7 @@ const LocalePicker = ()=>{
+         }) : [];
+         return displayedLocales.sort((a, b)=>a.name.localeCompare(b.name)).map((locale)=>/*#__PURE__*/ jsx(SingleSelectOption, {
+                 value: locale.code,
+-                children: locale.name
++                children: getLocalizedLocaleName(locale, language)
+             }, locale.id));
+     }, [
+         locales,
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.js b/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.js
+index 2437700..98ec5b2 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.js
++++ b/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.js
+@@ -5,6 +5,7 @@ var React = require('react');
+ var designSystem = require('@strapi/design-system');
+ var reactIntl = require('react-intl');
+ var getTranslation = require('../utils/getTranslation.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
+ var DeleteLocale = require('./DeleteLocale.js');
+ var EditLocale = require('./EditLocale.js');
+ 
+@@ -29,7 +30,7 @@ var React__namespace = /*#__PURE__*/_interopNamespaceDefault(React);
+ 
+ const LocaleTable = ({ locales = [], canDelete, canUpdate })=>{
+     const [editLocaleId, setEditLocaleId] = React__namespace.useState();
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const handleClick = (localeId)=>()=>{
+             if (canUpdate) {
+                 setEditLocaleId(localeId);
+@@ -98,7 +99,7 @@ const LocaleTable = ({ locales = [], canDelete, canUpdate })=>{
+                                     /*#__PURE__*/ jsxRuntime.jsx(designSystem.Td, {
+                                         children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.Typography, {
+                                             textColor: "neutral800",
+-                                            children: locale.name
++                                            children: localeDisplayNames.getLocalizedLocaleName(locale, language)
+                                         })
+                                     }),
+                                     /*#__PURE__*/ jsxRuntime.jsx(designSystem.Td, {
+diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.mjs b/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.mjs
+index a7ed8bf..331dd3b 100644
+--- a/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.mjs
++++ b/node_modules/@strapi/i18n/dist/admin/components/LocaleTable.mjs
+@@ -3,12 +3,13 @@ import * as React from 'react';
+ import { Table, Thead, Tr, Th, Typography, VisuallyHidden, Tbody, Td, Flex } from '@strapi/design-system';
+ import { useIntl } from 'react-intl';
+ import { getTranslation } from '../utils/getTranslation.mjs';
++import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
+ import { DeleteLocale } from './DeleteLocale.mjs';
+ import { EditLocale, EditModal } from './EditLocale.mjs';
+ 
+ const LocaleTable = ({ locales = [], canDelete, canUpdate })=>{
+     const [editLocaleId, setEditLocaleId] = React.useState();
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const handleClick = (localeId)=>()=>{
+             if (canUpdate) {
+                 setEditLocaleId(localeId);
+@@ -77,7 +78,7 @@ const LocaleTable = ({ locales = [], canDelete, canUpdate })=>{
+                                     /*#__PURE__*/ jsx(Td, {
+                                         children: /*#__PURE__*/ jsx(Typography, {
+                                             textColor: "neutral800",
+-                                            children: locale.name
++                                            children: getLocalizedLocaleName(locale, language)
+                                         })
+                                     }),
+                                     /*#__PURE__*/ jsx(Td, {
+diff --git a/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.js b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.js
+new file mode 100644
+index 0000000..4977390
+--- /dev/null
++++ b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.js
+@@ -0,0 +1,62 @@
++'use strict';
++
++const LOCALIZED_LOCALE_NAMES = {
++  en: {
++    en: 'English (en)',
++    zh: 'Chinese (zh)',
++    'zh-Hans': 'Chinese (Simplified) (zh-Hans)',
++    'zh-Hant': 'Chinese (Traditional) (zh-Hant)'
++  },
++  'zh-Hans': {
++    en: '英语（en）',
++    zh: '中文（zh）',
++    'zh-Hans': '简体中文（zh-Hans）',
++    'zh-Hant': '繁体中文（zh-Hant）'
++  },
++  zh: {
++    en: '英文（en）',
++    zh: '中文（zh）',
++    'zh-Hans': '簡體中文（zh-Hans）',
++    'zh-Hant': '繁體中文（zh-Hant）'
++  }
++};
++
++const DEFAULT_SUFFIXES = {
++  en: ' (default)',
++  'zh-Hans': '（默认）',
++  zh: '（預設）'
++};
++
++const normalizeAdminLanguage = (language = 'en')=>{
++  if (typeof language === 'string') {
++    if (language === 'zh-Hans' || language.startsWith('zh-Hans')) {
++      return 'zh-Hans';
++    }
++    if (language === 'zh' || language.startsWith('zh-Hant') || language.startsWith('zh-TW') || language.startsWith('zh-HK')) {
++      return 'zh';
++    }
++  }
++  return 'en';
++};
++
++const getLocalizedLocaleName = (locale, language = 'en')=>{
++  const localeCode = locale?.code;
++  const fallbackName = locale?.name ?? localeCode ?? '';
++  if (!localeCode) {
++    return fallbackName;
++  }
++  const adminLanguage = normalizeAdminLanguage(language);
++  return LOCALIZED_LOCALE_NAMES[adminLanguage]?.[localeCode] ?? fallbackName;
++};
++
++const getLocalizedLocaleDisplayName = (locale, language = 'en')=>{
++  const name = getLocalizedLocaleName(locale, language);
++  if (!locale?.isDefault) {
++    return name;
++  }
++  return `${name}${DEFAULT_SUFFIXES[normalizeAdminLanguage(language)] ?? DEFAULT_SUFFIXES.en}`;
++};
++
++exports.getLocalizedLocaleDisplayName = getLocalizedLocaleDisplayName;
++exports.getLocalizedLocaleName = getLocalizedLocaleName;
++exports.normalizeAdminLanguage = normalizeAdminLanguage;
+diff --git a/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.mjs b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.mjs
+new file mode 100644
+index 0000000..b0d59d3
+--- /dev/null
++++ b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.mjs
+@@ -0,0 +1,58 @@
++const LOCALIZED_LOCALE_NAMES = {
++  en: {
++    en: 'English (en)',
++    zh: 'Chinese (zh)',
++    'zh-Hans': 'Chinese (Simplified) (zh-Hans)',
++    'zh-Hant': 'Chinese (Traditional) (zh-Hant)'
++  },
++  'zh-Hans': {
++    en: '英语（en）',
++    zh: '中文（zh）',
++    'zh-Hans': '简体中文（zh-Hans）',
++    'zh-Hant': '繁体中文（zh-Hant）'
++  },
++  zh: {
++    en: '英文（en）',
++    zh: '中文（zh）',
++    'zh-Hans': '簡體中文（zh-Hans）',
++    'zh-Hant': '繁體中文（zh-Hant）'
++  }
++};
++
++const DEFAULT_SUFFIXES = {
++  en: ' (default)',
++  'zh-Hans': '（默认）',
++  zh: '（預設）'
++};
++
++const normalizeAdminLanguage = (language = 'en')=>{
++  if (typeof language === 'string') {
++    if (language === 'zh-Hans' || language.startsWith('zh-Hans')) {
++      return 'zh-Hans';
++    }
++    if (language === 'zh' || language.startsWith('zh-Hant') || language.startsWith('zh-TW') || language.startsWith('zh-HK')) {
++      return 'zh';
++    }
++  }
++  return 'en';
++};
++
++const getLocalizedLocaleName = (locale, language = 'en')=>{
++  const localeCode = locale?.code;
++  const fallbackName = locale?.name ?? localeCode ?? '';
++  if (!localeCode) {
++    return fallbackName;
++  }
++  const adminLanguage = normalizeAdminLanguage(language);
++  return LOCALIZED_LOCALE_NAMES[adminLanguage]?.[localeCode] ?? fallbackName;
++};
++
++const getLocalizedLocaleDisplayName = (locale, language = 'en')=>{
++  const name = getLocalizedLocaleName(locale, language);
++  if (!locale?.isDefault) {
++    return name;
++  }
++  return `${name}${DEFAULT_SUFFIXES[normalizeAdminLanguage(language)] ?? DEFAULT_SUFFIXES.en}`;
++};
++
++export { getLocalizedLocaleDisplayName, getLocalizedLocaleName, normalizeAdminLanguage };

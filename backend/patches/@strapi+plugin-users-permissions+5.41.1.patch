@@ -1,0 +1,118 @@
+diff --git a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.js b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.js
+--- a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.js
++++ b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.js
+@@ -235,7 +235,10 @@
+                                             children: canUpdate && /*#__PURE__*/ jsxRuntime.jsx(designSystem.IconButton, {
+                                                 onClick: ()=>handleClickEdit(provider),
+                                                 variant: "ghost",
+-                                                label: "Edit",
++                                                label: formatMessage({
++                                                    id: "global.edit",
++                                                    defaultMessage: "Edit"
++                                                }),
+                                                 children: /*#__PURE__*/ jsxRuntime.jsx(icons.Pencil, {})
+                                             })
+                                         })
+diff --git a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.mjs b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.mjs
+--- a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.mjs
++++ b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Providers/index.mjs
+@@ -212,7 +212,10 @@
+                                             children: canUpdate && /*#__PURE__*/ jsx(IconButton, {
+                                                 onClick: ()=>handleClickEdit(provider),
+                                                 variant: "ghost",
+-                                                label: "Edit",
++                                                label: formatMessage({
++                                                    id: "global.edit",
++                                                    defaultMessage: "Edit"
++                                                }),
+                                                 children: /*#__PURE__*/ jsx(Pencil, {})
+                                             })
+                                         })
+diff --git a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.js b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.js
+--- a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.js
++++ b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.js
+@@ -81,6 +81,18 @@
+     if (isLoadingRole) {
+         return /*#__PURE__*/ jsxRuntime.jsx(admin.Page.Loading, {});
+     }
++    const localizedRoleKey = String(role.code || role.name || '').toLowerCase();
++    const localizedRole = localizedRoleKey === 'authenticated' || localizedRoleKey === 'public' ? {
++        ...role,
++        name: formatMessage({
++            id: getTrad(`roles.${localizedRoleKey}.name`),
++            defaultMessage: role.name
++        }),
++        description: formatMessage({
++            id: getTrad(`roles.${localizedRoleKey}.description`),
++            defaultMessage: role.description
++        })
++    } : role;
+     return /*#__PURE__*/ jsxRuntime.jsxs(admin.Page.Main, {
+         children: [
+             /*#__PURE__*/ jsxRuntime.jsx(admin.Page.Title, {
+@@ -94,8 +106,8 @@
+             /*#__PURE__*/ jsxRuntime.jsx(formik.Formik, {
+                 enableReinitialize: true,
+                 initialValues: {
+-                    name: role.name,
+-                    description: role.description
++                    name: localizedRole.name,
++                    description: localizedRole.description
+                 },
+                 onSubmit: handleEditRoleSubmit,
+                 validationSchema: constants$1.createRoleSchema,
+@@ -115,8 +127,8 @@
+                                         defaultMessage: 'Save'
+                                     })
+                                 }) : null,
+-                                title: role.name,
+-                                subtitle: role.description,
++                                title: localizedRole.name,
++                                subtitle: localizedRole.description,
+                                 navigationAction: // The back link for mobile works differently; it is placed higher up in the DOM.
+                                 /*#__PURE__*/ jsxRuntime.jsx(designSystem.Box, {
+                                     display: {
+diff --git a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.mjs b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.mjs
+--- a/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.mjs
++++ b/node_modules/@strapi/plugin-users-permissions/dist/admin/pages/Roles/pages/EditPage.mjs
+@@ -60,6 +60,18 @@
+     if (isLoadingRole) {
+         return /*#__PURE__*/ jsx(Page.Loading, {});
+     }
++    const localizedRoleKey = String(role.code || role.name || '').toLowerCase();
++    const localizedRole = localizedRoleKey === 'authenticated' || localizedRoleKey === 'public' ? {
++        ...role,
++        name: formatMessage({
++            id: getTrad(`roles.${localizedRoleKey}.name`),
++            defaultMessage: role.name
++        }),
++        description: formatMessage({
++            id: getTrad(`roles.${localizedRoleKey}.description`),
++            defaultMessage: role.description
++        })
++    } : role;
+     return /*#__PURE__*/ jsxs(Page.Main, {
+         children: [
+             /*#__PURE__*/ jsx(Page.Title, {
+@@ -73,8 +85,8 @@
+             /*#__PURE__*/ jsx(Formik, {
+                 enableReinitialize: true,
+                 initialValues: {
+-                    name: role.name,
+-                    description: role.description
++                    name: localizedRole.name,
++                    description: localizedRole.description
+                 },
+                 onSubmit: handleEditRoleSubmit,
+                 validationSchema: createRoleSchema,
+@@ -94,8 +106,8 @@
+                                         defaultMessage: 'Save'
+                                     })
+                                 }) : null,
+-                                title: role.name,
+-                                subtitle: role.description,
++                                title: localizedRole.name,
++                                subtitle: localizedRole.description,
+                                 navigationAction: // The back link for mobile works differently; it is placed higher up in the DOM.
+                                 /*#__PURE__*/ jsx(Box, {
+                                     display: {

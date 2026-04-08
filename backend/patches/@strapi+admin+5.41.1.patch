@@ -1,0 +1,198 @@
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.js b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.js
+index c99a13f..ee4199f 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.js
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.js
+@@ -49,7 +49,10 @@ const CollapsableContentType = ({ controllers = [], label, orderNumber = 0, disa
+             /*#__PURE__*/ jsxRuntime.jsx(designSystem.Accordion.Header, {
+                 variant: orderNumber % 2 ? 'primary' : 'secondary',
+                 children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.Accordion.Trigger, {
+-                    children: capitalize(label)
++                    children: formatMessage({
++                        id: String(label).toLowerCase(),
++                        defaultMessage: capitalize(label)
++                    })
+                 })
+             }),
+             /*#__PURE__*/ jsxRuntime.jsx(designSystem.Accordion.Content, {
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.mjs b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.mjs
+index 432bce3..1ecbd19 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.mjs
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/ApiTokens/EditView/components/CollapsableContentType.mjs
+@@ -47,7 +47,10 @@ const CollapsableContentType = ({ controllers = [], label, orderNumber = 0, disa
+             /*#__PURE__*/ jsx(Accordion.Header, {
+                 variant: orderNumber % 2 ? 'primary' : 'secondary',
+                 children: /*#__PURE__*/ jsx(Accordion.Trigger, {
+-                    children: capitalize(label)
++                    children: formatMessage({
++                        id: String(label).toLowerCase(),
++                        defaultMessage: capitalize(label)
++                    })
+                 })
+             }),
+             /*#__PURE__*/ jsx(Accordion.Content, {
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.js b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.js
+index 452a572..6b67470 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.js
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.js
+@@ -136,6 +136,18 @@ const EditPage = ()=>{
+         }
+     };
+     const isFormDisabled = !isRoleLoading && role.code === 'strapi-super-admin';
++    const localizedRoleKey = String(role.code || role.name || "").toLowerCase();
++    const localizedRole = localizedRoleKey === 'strapi-super-admin' || localizedRoleKey === 'strapi-editor' || localizedRoleKey === 'strapi-author' ? {
++        ...role,
++        name: formatMessage({
++            id: `global.${localizedRoleKey}`,
++            defaultMessage: role.name
++        }),
++        description: formatMessage({
++            id: `admin.roles.${localizedRoleKey}.description`,
++            defaultMessage: role.description
++        })
++    } : role;
+     if (isLoadingPermissionsLayout || isRoleLoading || isLoadingPermissions || !permissionsLayout) {
+         return /*#__PURE__*/ jsxRuntime.jsx(PageHelpers.Page.Loading, {});
+     }
+@@ -152,8 +164,8 @@ const EditPage = ()=>{
+             /*#__PURE__*/ jsxRuntime.jsx(formik.Formik, {
+                 enableReinitialize: true,
+                 initialValues: {
+-                    name: role.name ?? '',
+-                    description: role.description ?? ''
++                    name: localizedRole.name ?? '',
++                    description: localizedRole.description ?? ''
+                 },
+                 onSubmit: handleEditRoleSubmit,
+                 validationSchema: EDIT_ROLE_SCHEMA,
+@@ -204,7 +216,7 @@ const EditPage = ()=>{
+                                             values: values,
+                                             onChange: handleChange,
+                                             onBlur: handleBlur,
+-                                            role: role
++                                            role: localizedRole
+                                         }),
+                                         /*#__PURE__*/ jsxRuntime.jsx(designSystem.Box, {
+                                             shadow: "filterShadow",
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.mjs b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.mjs
+index 0fba6a1..744013c 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.mjs
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/EditPage.mjs
+@@ -114,6 +114,18 @@ const EditPage = ()=>{
+         }
+     };
+     const isFormDisabled = !isRoleLoading && role.code === 'strapi-super-admin';
++    const localizedRoleKey = String(role.code || role.name || "").toLowerCase();
++    const localizedRole = localizedRoleKey === 'strapi-super-admin' || localizedRoleKey === 'strapi-editor' || localizedRoleKey === 'strapi-author' ? {
++        ...role,
++        name: formatMessage({
++            id: `global.${localizedRoleKey}`,
++            defaultMessage: role.name
++        }),
++        description: formatMessage({
++            id: `admin.roles.${localizedRoleKey}.description`,
++            defaultMessage: role.description
++        })
++    } : role;
+     if (isLoadingPermissionsLayout || isRoleLoading || isLoadingPermissions || !permissionsLayout) {
+         return /*#__PURE__*/ jsx(Page.Loading, {});
+     }
+@@ -130,8 +142,8 @@ const EditPage = ()=>{
+             /*#__PURE__*/ jsx(Formik, {
+                 enableReinitialize: true,
+                 initialValues: {
+-                    name: role.name ?? '',
+-                    description: role.description ?? ''
++                    name: localizedRole.name ?? '',
++                    description: localizedRole.description ?? ''
+                 },
+                 onSubmit: handleEditRoleSubmit,
+                 validationSchema: EDIT_ROLE_SCHEMA,
+@@ -182,7 +194,7 @@ const EditPage = ()=>{
+                                             values: values,
+                                             onChange: handleChange,
+                                             onBlur: handleBlur,
+-                                            role: role
++                                            role: localizedRole
+                                         }),
+                                         /*#__PURE__*/ jsx(Box, {
+                                             shadow: "filterShadow",
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.js b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.js
+index d691ae5..1f66f10 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.js
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.js
+@@ -131,7 +131,10 @@ const Collapse = ({ availableActions = [], isActive = false, isGrey = false, isF
+                     /*#__PURE__*/ jsxRuntime.jsx(RowLabelWithCheckbox.RowLabelWithCheckbox, {
+                         isCollapsable: true,
+                         isFormDisabled: isFormDisabled,
+-                        label: strings.capitalise(label),
++                        label: formatMessage({
++                            id: String(label).toLowerCase(),
++                            defaultMessage: strings.capitalise(label)
++                        }),
+                         checkboxName: pathToData,
+                         onChange: onChangeParentCheckbox,
+                         onClick: onClickToggle,
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.mjs b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.mjs
+index 459c261..228b42d 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.mjs
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/ContentTypeCollapses.mjs
+@@ -110,7 +110,10 @@ const Collapse = ({ availableActions = [], isActive = false, isGrey = false, isF
+                     /*#__PURE__*/ jsx(RowLabelWithCheckbox, {
+                         isCollapsable: true,
+                         isFormDisabled: isFormDisabled,
+-                        label: capitalise(label),
++                        label: formatMessage({
++                            id: String(label).toLowerCase(),
++                            defaultMessage: capitalise(label)
++                        }),
+                         checkboxName: pathToData,
+                         onChange: onChangeParentCheckbox,
+                         onClick: onClickToggle,
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.js b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.js
+index c66c928..879f288 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.js
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.js
+@@ -162,7 +162,7 @@ const SubCategory = ({ actions = [], categoryName, isFormDisabled, subCategoryNa
+                             children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.Typography, {
+                                 variant: "sigma",
+                                 textColor: "neutral600",
+-                                children: subCategoryName
++                                children: localizeDisplayName(subCategoryName)
+                             })
+                         }),
+                         /*#__PURE__*/ jsxRuntime.jsx(Border, {
+@@ -242,8 +242,8 @@ const SubCategory = ({ actions = [], categoryName, isFormDisabled, subCategoryNa
+                                 }),
+                                 /*#__PURE__*/ jsxRuntime.jsx(ConditionsModal.ConditionsModal, {
+                                     headerBreadCrumbs: [
+-                                        categoryName,
+-                                        subCategoryName
++                                        categoryDisplayName,
++                                        localizeDisplayName(subCategoryName)
+                                     ],
+                                     actions: formattedActions,
+                                     isFormDisabled: isFormDisabled,
+diff --git a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.mjs b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.mjs
+index ed297b5..4e4ba4e 100644
+--- a/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.mjs
++++ b/node_modules/@strapi/admin/dist/admin/admin/src/pages/Settings/pages/Roles/components/PluginsAndSettings.mjs
+@@ -141,7 +141,7 @@ const SubCategory = ({ actions = [], categoryName, isFormDisabled, subCategoryNa
+                             children: /*#__PURE__*/ jsx(Typography, {
+                                 variant: "sigma",
+                                 textColor: "neutral600",
+-                                children: subCategoryName
++                                children: localizeDisplayName(subCategoryName)
+                             })
+                         }),
+                         /*#__PURE__*/ jsx(Border, {
+@@ -221,8 +221,8 @@ const SubCategory = ({ actions = [], categoryName, isFormDisabled, subCategoryNa
+                                 }),
+                                 /*#__PURE__*/ jsx(ConditionsModal, {
+                                     headerBreadCrumbs: [
+-                                        categoryName,
+-                                        subCategoryName
++                                        categoryDisplayName,
++                                        localizeDisplayName(subCategoryName)
+                                     ],
+                                     actions: formattedActions,
+                                     isFormDisabled: isFormDisabled,

@@ -1,5 +1,5 @@
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js
-index 412cec8..61aa2f3 100644
+index 412cec8..b045a7d 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js
 +++ b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.js
 @@ -9,13 +9,14 @@ var qs = require('qs');
@@ -18,12 +18,15 @@ index 412cec8..61aa2f3 100644
      /**
     * TODO: Should this be extracted an made into a factory to recursively get
     * error messages??
-@@ -143,8 +144,8 @@ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
- };
+@@ -141,7 +142,7 @@ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
+         children: chunks
+     });
  const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationErrors = {}, action })=>{
 -    const { formatMessage } = reactIntl.useIntl();
 +    const { formatMessage, locale: language } = reactIntl.useIntl();
      const selectedRows = strapiAdmin.useTable('BulkLocaleActionModal', (state)=>state.selectedRows);
+     const getFormattedCountMessage = ()=>{
+         const currentStatusByLocale = rows.reduce((acc, { locale, status })=>{
 @@ -195,7 +196,7 @@ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationError
                                              children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.Typography, {
                                                  variant: "sigma",
@@ -34,7 +37,7 @@ index 412cec8..61aa2f3 100644
                                          }),
                                          /*#__PURE__*/ jsxRuntime.jsx(strapiAdmin.Table.Cell, {
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs
-index e98e3b0..06d74f0 100644
+index e98e3b0..6b672d6 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs
 +++ b/node_modules/@strapi/i18n/dist/admin/components/BulkLocaleActionModal.mjs
 @@ -7,13 +7,14 @@ import { stringify } from 'qs';
@@ -53,12 +56,15 @@ index e98e3b0..06d74f0 100644
      /**
     * TODO: Should this be extracted an made into a factory to recursively get
     * error messages??
-@@ -141,8 +142,8 @@ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
- };
+@@ -139,7 +140,7 @@ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
+         children: chunks
+     });
  const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationErrors = {}, action })=>{
 -    const { formatMessage } = useIntl();
 +    const { formatMessage, locale: language } = useIntl();
      const selectedRows = useTable('BulkLocaleActionModal', (state)=>state.selectedRows);
+     const getFormattedCountMessage = ()=>{
+         const currentStatusByLocale = rows.reduce((acc, { locale, status })=>{
 @@ -193,7 +194,7 @@ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationError
                                              children: /*#__PURE__*/ jsx(Typography, {
                                                  variant: "sigma",
@@ -69,17 +75,17 @@ index e98e3b0..06d74f0 100644
                                          }),
                                          /*#__PURE__*/ jsx(Table.Cell, {
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js
-index d743b6e..621c986 100644
+index d743b6e..6a1b969 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js
 +++ b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.js
-@@ -19,6 +19,7 @@ var relations = require('../services/relations.js');
+@@ -16,6 +16,7 @@ var useI18n = require('../hooks/useI18n.js');
+ var aiLocalizationJobs = require('../services/aiLocalizationJobs.js');
+ var locales = require('../services/locales.js');
+ var relations = require('../services/relations.js');
++var localeDisplayNames = require('../utils/localeDisplayNames.js');
  var settings = require('../services/settings.js');
  var clean = require('../utils/clean.js');
  var getTranslation = require('../utils/getTranslation.js');
-+var localeDisplayNames = require('../utils/localeDisplayNames.js');
- var strings = require('../utils/strings.js');
- var BulkLocaleActionModal = require('./BulkLocaleActionModal.js');
- 
 @@ -47,7 +48,7 @@ const statusVariants = {
      modified: 'alternative'
  };
@@ -157,22 +163,31 @@ index d743b6e..621c986 100644
              defaultMessage: 'Delete entry ({locale})'
          }, {
 -            locale: locale && locale.name
-+            locale: locale ? localeDisplayNames.getLocalizedLocaleName(locale, language) : locale
++            locale: locale && localeDisplayNames.getLocalizedLocaleName(locale, language)
          }),
          icon: /*#__PURE__*/ jsxRuntime.jsx(StyledTrash, {}),
          variant: 'danger',
+@@ -665,7 +666,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+         query$1
+     ]);
+     const isOnPublishedTab = query$1.status === 'published';
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const { hasI18n, canPublish } = useI18n.useI18n();
+     const { toggleNotification } = strapiAdmin.useNotification();
+     const { _unstableFormatAPIError: formatAPIError } = strapiAdmin.useAPIErrorHandler();
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs
-index 2bafd97..dab33f3 100644
+index 2bafd97..80fb290 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs
 +++ b/node_modules/@strapi/i18n/dist/admin/components/CMHeaderActions.mjs
-@@ -17,6 +17,7 @@ import { useGetManyDraftRelationCountQuery } from '../services/relations.mjs';
+@@ -14,6 +14,7 @@ import { useI18n } from '../hooks/useI18n.mjs';
+ import { useGetAILocalizationJobsByDocumentQuery } from '../services/aiLocalizationJobs.mjs';
+ import { useGetLocalesQuery } from '../services/locales.mjs';
+ import { useGetManyDraftRelationCountQuery } from '../services/relations.mjs';
++import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
  import { useGetSettingsQuery } from '../services/settings.mjs';
  import { cleanData } from '../utils/clean.mjs';
  import { getTranslation } from '../utils/getTranslation.mjs';
-+import { getLocalizedLocaleName } from '../utils/localeDisplayNames.mjs';
- import { capitalize } from '../utils/strings.mjs';
- import { BulkLocaleActionModal } from './BulkLocaleActionModal.mjs';
- 
 @@ -26,7 +27,7 @@ const statusVariants = {
      modified: 'alternative'
  };
@@ -245,17 +260,17 @@ index 2bafd97..dab33f3 100644
      const navigate = useNavigate();
      const { toggleNotification } = useNotification();
      const { delete: deleteAction, isLoading } = unstable_useDocumentActions();
-@@ -568,7 +569,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
-             id: getTranslation('actions.delete.label'),
-             defaultMessage: 'Delete entry ({locale})'
-         }, {
--            locale: locale && locale.name
-+            locale: locale ? getLocalizedLocaleName(locale, language) : locale
-         }),
-         icon: /*#__PURE__*/ jsx(StyledTrash, {}),
-         variant: 'danger',
+@@ -644,7 +645,7 @@ const AITranslationStatusAction = ({ documentId, model, collectionType })=>{
+         query
+     ]);
+     const isOnPublishedTab = query.status === 'published';
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const { hasI18n, canPublish } = useI18n();
+     const { toggleNotification } = useNotification();
+     const { _unstableFormatAPIError: formatAPIError } = useAPIErrorHandler();
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js
-index 0355f2b..1cd857e 100644
+index 0355f2b..5f3f737 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js
 +++ b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.js
 @@ -10,6 +10,7 @@ var yup = require('yup');
@@ -275,7 +290,8 @@ index 0355f2b..1cd857e 100644
      const [visible, setVisible] = React__namespace.useState(false);
      return /*#__PURE__*/ jsxRuntime.jsxs(designSystem.Modal.Root, {
          open: visible,
-@@ -227,8 +228,8 @@ const CreateLocale = ({ disabled, variant = 'default' })=>{
+@@ -225,7 +226,7 @@ const CreateModal = ({ onClose })=>{
+     });
  };
  const BaseForm = ({ mode = 'create' })=>{
 -    const { formatMessage } = reactIntl.useIntl();
@@ -292,8 +308,17 @@ index 0355f2b..1cd857e 100644
              value: locale.code
          }));
      const translatedForm = [
+@@ -359,7 +360,7 @@ const EnumerationInput = ({ disabled, hint, label, name, options, placeholder, r
+             const locale = defaultLocales.find((locale)=>locale.code === value);
+             onChange(name, value);
+             // This lets us automatically fill the name field with the locale name
+-            onChange('name', locale.name);
++            onChange('name', localeDisplayNames.getLocalizedLocaleName(locale, language));
+         } else {
+             onChange(name, value);
+         }
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs
-index 70e5ce3..f45a6b7 100644
+index 70e5ce3..a982d00 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs
 +++ b/node_modules/@strapi/i18n/dist/admin/components/CreateLocale.mjs
 @@ -8,9 +8,10 @@ import * as yup from 'yup';
@@ -308,7 +333,8 @@ index 70e5ce3..f45a6b7 100644
      const [visible, setVisible] = React.useState(false);
      return /*#__PURE__*/ jsxs(Modal.Root, {
          open: visible,
-@@ -205,8 +206,8 @@ const CreateLocale = ({ disabled, variant = 'default' })=>{
+@@ -203,7 +204,7 @@ const CreateModal = ({ onClose })=>{
+     });
  };
  const BaseForm = ({ mode = 'create' })=>{
 -    const { formatMessage } = useIntl();
@@ -325,6 +351,15 @@ index 70e5ce3..f45a6b7 100644
              value: locale.code
          }));
      const translatedForm = [
+@@ -337,7 +338,7 @@ const EnumerationInput = ({ disabled, hint, label, name, options, placeholder, r
+             const locale = defaultLocales.find((locale)=>locale.code === value);
+             onChange(name, value);
+             // This lets us automatically fill the name field with the locale name
+-            onChange('name', locale.name);
++            onChange('name', getLocalizedLocaleName(locale, language));
+         } else {
+             onChange(name, value);
+         }
 diff --git a/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js b/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js
 index f071920..2c4dc43 100644
 --- a/node_modules/@strapi/i18n/dist/admin/components/LocaleListCell.js
@@ -482,37 +517,59 @@ index a7ed8bf..331dd3b 100644
                                      /*#__PURE__*/ jsx(Td, {
 diff --git a/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.js b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.js
 new file mode 100644
-index 0000000..4977390
+index 0000000..f3e3739
 --- /dev/null
 +++ b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.js
-@@ -0,0 +1,62 @@
-+'use strict';
+@@ -0,0 +1,87 @@
++"use strict";
 +
-+const LOCALIZED_LOCALE_NAMES = {
-+  en: {
-+    en: 'English (en)',
-+    zh: 'Chinese (zh)',
-+    'zh-Hans': 'Chinese (Simplified) (zh-Hans)',
-+    'zh-Hant': 'Chinese (Traditional) (zh-Hant)'
-+  },
-+  'zh-Hans': {
-+    en: '英语（en）',
-+    zh: '中文（zh）',
-+    'zh-Hans': '简体中文（zh-Hans）',
-+    'zh-Hant': '繁体中文（zh-Hant）'
-+  },
-+  zh: {
-+    en: '英文（en）',
-+    zh: '中文（zh）',
-+    'zh-Hans': '簡體中文（zh-Hans）',
-+    'zh-Hant': '繁體中文（zh-Hant）'
-+  }
++Object.defineProperty(exports, "__esModule", { value: true });
++
++const LOCALE_NAMES_ZH_HANS = {
++  af: "南非荷兰语", ar: "阿拉伯语", ca: "加泰罗尼亚语", cs: "捷克语",
++  de: "德语", "de-AT": "德语（奥地利）", dk: "丹麦语", el: "希腊语",
++  en: "英语", "en-GB": "英语（英国）", es: "西班牙语", et: "爱沙尼亚语",
++  eu: "巴斯克语", fa: "波斯语", fi: "芬兰语", fr: "法语", "fr-CA": "法语（加拿大）",
++  gu: "古吉拉特语", he: "希伯来语", hi: "印地语", hr: "克罗地亚语",
++  hu: "匈牙利语", id: "印度尼西亚语", it: "意大利语", ja: "日语",
++  ka: "格鲁吉亚语", km: "高棉语", ko: "韩语", lo: "老挝语",
++  lt: "立陶宛语", lv: "拉脱维亚语", ml: "马拉雅拉姆语", mn: "蒙古语",
++  ms: "马来语", my: "缅甸语", nb: "挪威语", ne: "尼泊尔语",
++  nl: "荷兰语", no: "挪威语", ckb: "库尔德语（索拉尼）",
++  pl: "波兰语", "pt-BR": "葡萄牙语（巴西）", pt: "葡萄牙语",
++  ro: "罗马尼亚语", ru: "俄语", sa: "梵语", si: "僧伽罗语",
++  sk: "斯洛伐克语", sl: "斯洛文尼亚语", sq: "阿尔巴尼亚语",
++  sr: "塞尔维亚语", sv: "瑞典语", ta: "泰米尔语", te: "泰卢固语",
++  th: "泰语", tk: "土库曼语", tr: "土耳其语", uk: "乌克兰语",
++  ur: "乌尔都语", uz: "乌兹别克语", vi: "越南语",
++  zh: "繁体中文", "zh-Hans": "简体中文", "zh-Hant": "繁体中文",
++};
++
++const LOCALE_NAMES_ZH_HANT = {
++  af: "南非荷蘭語", ar: "阿拉伯語", ca: "加泰隆尼亞語", cs: "捷克語",
++  de: "德語", "de-AT": "德語（奧地利）", dk: "丹麥語", el: "希臘語",
++  en: "英語", "en-GB": "英語（英國）", es: "西班牙語", et: "愛沙尼亞語",
++  eu: "巴斯克語", fa: "波斯語", fi: "芬蘭語", fr: "法語", "fr-CA": "法語（加拿大）",
++  gu: "古吉拉特語", he: "希伯來語", hi: "印地語", hr: "克羅地亞語",
++  hu: "匈牙利語", id: "印度尼西亞語", it: "義大利語", ja: "日語",
++  ka: "格魯吉亞語", km: "高棉語", ko: "韓語", lo: "老撾語",
++  lt: "立陶宛語", lv: "拉脫維亞語", ml: "馬拉雅拉姆語", mn: "蒙古語",
++  ms: "馬來語", my: "緬甸語", nb: "挪威語", ne: "尼泊爾語",
++  nl: "荷蘭語", no: "挪威語", ckb: "庫爾德語（索拉尼）",
++  pl: "波蘭語", "pt-BR": "葡萄牙語（巴西）", pt: "葡萄牙語",
++  ro: "羅馬尼亞語", ru: "俄語", sa: "梵語", si: "僧伽羅語",
++  sk: "斯洛伐克語", sl: "斯洛文尼亞語", sq: "阿爾巴尼亞語",
++  sr: "塞爾維亞語", sv: "瑞典語", ta: "泰米爾語", te: "泰盧固語",
++  th: "泰語", tk: "土庫曼語", tr: "土耳其語", uk: "烏克蘭語",
++  ur: "烏爾都語", uz: "烏茲別克語", vi: "越南語",
++  zh: "繁體中文", "zh-Hans": "簡體中文", "zh-Hant": "繁體中文",
 +};
 +
 +const DEFAULT_SUFFIXES = {
-+  en: ' (default)',
-+  'zh-Hans': '（默认）',
-+  zh: '（預設）'
++  en: " (default)",
++  "zh-Hans": "（默认）",
++  "zh-Hant": "（預設）",
++  zh: "（預設）",
 +};
 +
 +const normalizeAdminLanguage = (language = 'en')=>{
@@ -524,61 +581,84 @@ index 0000000..4977390
 +      return 'zh';
 +    }
 +  }
-+  return 'en';
++  return language;
 +};
 +
 +const getLocalizedLocaleName = (locale, language = 'en')=>{
-+  const localeCode = locale?.code;
-+  const fallbackName = locale?.name ?? localeCode ?? '';
-+  if (!localeCode) {
-+    return fallbackName;
-+  }
++  if (!locale) return '';
 +  const adminLanguage = normalizeAdminLanguage(language);
-+  return LOCALIZED_LOCALE_NAMES[adminLanguage]?.[localeCode] ?? fallbackName;
++  if (adminLanguage === 'zh-Hans' && LOCALE_NAMES_ZH_HANS[locale.code]) {
++    return LOCALE_NAMES_ZH_HANS[locale.code];
++  }
++  if ((adminLanguage === 'zh' || adminLanguage === 'zh-Hant') && LOCALE_NAMES_ZH_HANT[locale.code]) {
++    return LOCALE_NAMES_ZH_HANT[locale.code];
++  }
++  return locale.name;
 +};
 +
 +const getLocalizedLocaleDisplayName = (locale, language = 'en')=>{
 +  const name = getLocalizedLocaleName(locale, language);
-+  if (!locale?.isDefault) {
-+    return name;
++  if (locale && locale.isDefault) {
++    return `${name}${DEFAULT_SUFFIXES[normalizeAdminLanguage(language)] ?? DEFAULT_SUFFIXES.en}`;
 +  }
-+  return `${name}${DEFAULT_SUFFIXES[normalizeAdminLanguage(language)] ?? DEFAULT_SUFFIXES.en}`;
++  return name;
 +};
 +
-+exports.getLocalizedLocaleDisplayName = getLocalizedLocaleDisplayName;
 +exports.getLocalizedLocaleName = getLocalizedLocaleName;
++exports.getLocalizedLocaleDisplayName = getLocalizedLocaleDisplayName;
 +exports.normalizeAdminLanguage = normalizeAdminLanguage;
++//# sourceMappingURL=localeDisplayNames.js.map
 diff --git a/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.mjs b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.mjs
 new file mode 100644
-index 0000000..b0d59d3
+index 0000000..5352065
 --- /dev/null
 +++ b/node_modules/@strapi/i18n/dist/admin/utils/localeDisplayNames.mjs
-@@ -0,0 +1,58 @@
-+const LOCALIZED_LOCALE_NAMES = {
-+  en: {
-+    en: 'English (en)',
-+    zh: 'Chinese (zh)',
-+    'zh-Hans': 'Chinese (Simplified) (zh-Hans)',
-+    'zh-Hant': 'Chinese (Traditional) (zh-Hant)'
-+  },
-+  'zh-Hans': {
-+    en: '英语（en）',
-+    zh: '中文（zh）',
-+    'zh-Hans': '简体中文（zh-Hans）',
-+    'zh-Hant': '繁体中文（zh-Hant）'
-+  },
-+  zh: {
-+    en: '英文（en）',
-+    zh: '中文（zh）',
-+    'zh-Hans': '簡體中文（zh-Hans）',
-+    'zh-Hant': '繁體中文（zh-Hant）'
-+  }
+@@ -0,0 +1,81 @@
++const LOCALE_NAMES_ZH_HANS = {
++  af: "南非荷兰语", ar: "阿拉伯语", ca: "加泰罗尼亚语", cs: "捷克语",
++  de: "德语", "de-AT": "德语（奥地利）", dk: "丹麦语", el: "希腊语",
++  en: "英语", "en-GB": "英语（英国）", es: "西班牙语", et: "爱沙尼亚语",
++  eu: "巴斯克语", fa: "波斯语", fi: "芬兰语", fr: "法语", "fr-CA": "法语（加拿大）",
++  gu: "古吉拉特语", he: "希伯来语", hi: "印地语", hr: "克罗地亚语",
++  hu: "匈牙利语", id: "印度尼西亚语", it: "意大利语", ja: "日语",
++  ka: "格鲁吉亚语", km: "高棉语", ko: "韩语", lo: "老挝语",
++  lt: "立陶宛语", lv: "拉脱维亚语", ml: "马拉雅拉姆语", mn: "蒙古语",
++  ms: "马来语", my: "缅甸语", nb: "挪威语", ne: "尼泊尔语",
++  nl: "荷兰语", no: "挪威语", ckb: "库尔德语（索拉尼）",
++  pl: "波兰语", "pt-BR": "葡萄牙语（巴西）", pt: "葡萄牙语",
++  ro: "罗马尼亚语", ru: "俄语", sa: "梵语", si: "僧伽罗语",
++  sk: "斯洛伐克语", sl: "斯洛文尼亚语", sq: "阿尔巴尼亚语",
++  sr: "塞尔维亚语", sv: "瑞典语", ta: "泰米尔语", te: "泰卢固语",
++  th: "泰语", tk: "土库曼语", tr: "土耳其语", uk: "乌克兰语",
++  ur: "乌尔都语", uz: "乌兹别克语", vi: "越南语",
++  zh: "繁体中文", "zh-Hans": "简体中文", "zh-Hant": "繁体中文",
++};
++
++const LOCALE_NAMES_ZH_HANT = {
++  af: "南非荷蘭語", ar: "阿拉伯語", ca: "加泰隆尼亞語", cs: "捷克語",
++  de: "德語", "de-AT": "德語（奧地利）", dk: "丹麥語", el: "希臘語",
++  en: "英語", "en-GB": "英語（英國）", es: "西班牙語", et: "愛沙尼亞語",
++  eu: "巴斯克語", fa: "波斯語", fi: "芬蘭語", fr: "法語", "fr-CA": "法語（加拿大）",
++  gu: "古吉拉特語", he: "希伯來語", hi: "印地語", hr: "克羅地亞語",
++  hu: "匈牙利語", id: "印度尼西亞語", it: "義大利語", ja: "日語",
++  ka: "格魯吉亞語", km: "高棉語", ko: "韓語", lo: "老撾語",
++  lt: "立陶宛語", lv: "拉脫維亞語", ml: "馬拉雅拉姆語", mn: "蒙古語",
++  ms: "馬來語", my: "緬甸語", nb: "挪威語", ne: "尼泊爾語",
++  nl: "荷蘭語", no: "挪威語", ckb: "庫爾德語（索拉尼）",
++  pl: "波蘭語", "pt-BR": "葡萄牙語（巴西）", pt: "葡萄牙語",
++  ro: "羅馬尼亞語", ru: "俄語", sa: "梵語", si: "僧伽羅語",
++  sk: "斯洛伐克語", sl: "斯洛文尼亞語", sq: "阿爾巴尼亞語",
++  sr: "塞爾維亞語", sv: "瑞典語", ta: "泰米爾語", te: "泰盧固語",
++  th: "泰語", tk: "土庫曼語", tr: "土耳其語", uk: "烏克蘭語",
++  ur: "烏爾都語", uz: "烏茲別克語", vi: "越南語",
++  zh: "繁體中文", "zh-Hans": "簡體中文", "zh-Hant": "繁體中文",
 +};
 +
 +const DEFAULT_SUFFIXES = {
-+  en: ' (default)',
-+  'zh-Hans': '（默认）',
-+  zh: '（預設）'
++  en: " (default)",
++  "zh-Hans": "（默认）",
++  "zh-Hant": "（預設）",
++  zh: "（預設）",
 +};
 +
 +const normalizeAdminLanguage = (language = 'en')=>{
@@ -590,25 +670,28 @@ index 0000000..b0d59d3
 +      return 'zh';
 +    }
 +  }
-+  return 'en';
++  return language;
 +};
 +
 +const getLocalizedLocaleName = (locale, language = 'en')=>{
-+  const localeCode = locale?.code;
-+  const fallbackName = locale?.name ?? localeCode ?? '';
-+  if (!localeCode) {
-+    return fallbackName;
-+  }
++  if (!locale) return '';
 +  const adminLanguage = normalizeAdminLanguage(language);
-+  return LOCALIZED_LOCALE_NAMES[adminLanguage]?.[localeCode] ?? fallbackName;
++  if (adminLanguage === 'zh-Hans' && LOCALE_NAMES_ZH_HANS[locale.code]) {
++    return LOCALE_NAMES_ZH_HANS[locale.code];
++  }
++  if ((adminLanguage === 'zh' || adminLanguage === 'zh-Hant') && LOCALE_NAMES_ZH_HANT[locale.code]) {
++    return LOCALE_NAMES_ZH_HANT[locale.code];
++  }
++  return locale.name;
 +};
 +
 +const getLocalizedLocaleDisplayName = (locale, language = 'en')=>{
 +  const name = getLocalizedLocaleName(locale, language);
-+  if (!locale?.isDefault) {
-+    return name;
++  if (locale && locale.isDefault) {
++    return `${name}${DEFAULT_SUFFIXES[normalizeAdminLanguage(language)] ?? DEFAULT_SUFFIXES.en}`;
 +  }
-+  return `${name}${DEFAULT_SUFFIXES[normalizeAdminLanguage(language)] ?? DEFAULT_SUFFIXES.en}`;
++  return name;
 +};
 +
-+export { getLocalizedLocaleDisplayName, getLocalizedLocaleName, normalizeAdminLanguage };
++export { getLocalizedLocaleName, getLocalizedLocaleDisplayName, normalizeAdminLanguage };
++//# sourceMappingURL=localeDisplayNames.mjs.map

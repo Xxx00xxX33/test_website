@@ -18,6 +18,12 @@ index 412cec8..61aa2f3 100644
      /**
     * TODO: Should this be extracted an made into a factory to recursively get
     * error messages??
+@@ -143,8 +144,8 @@ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
+ };
+ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationErrors = {}, action })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const selectedRows = strapiAdmin.useTable('BulkLocaleActionModal', (state)=>state.selectedRows);
 @@ -195,7 +196,7 @@ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationError
                                              children: /*#__PURE__*/ jsxRuntime.jsx(designSystem.Typography, {
                                                  variant: "sigma",
@@ -47,6 +53,12 @@ index e98e3b0..06d74f0 100644
      /**
     * TODO: Should this be extracted an made into a factory to recursively get
     * error messages??
+@@ -141,8 +142,8 @@ const EntryValidationText = ({ status = 'draft', validationErrors, action })=>{
+ };
+ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationErrors = {}, action })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const selectedRows = useTable('BulkLocaleActionModal', (state)=>state.selectedRows);
 @@ -193,7 +194,7 @@ const BulkLocaleActionModal = ({ headers, rows, localesMetadata, validationError
                                              children: /*#__PURE__*/ jsx(Typography, {
                                                  variant: "sigma",
@@ -263,6 +275,14 @@ index 0355f2b..1cd857e 100644
      const [visible, setVisible] = React__namespace.useState(false);
      return /*#__PURE__*/ jsxRuntime.jsxs(designSystem.Modal.Root, {
          open: visible,
+@@ -227,8 +228,8 @@ const CreateLocale = ({ disabled, variant = 'default' })=>{
+ };
+ const BaseForm = ({ mode = 'create' })=>{
+-    const { formatMessage } = reactIntl.useIntl();
++    const { formatMessage, locale: language } = reactIntl.useIntl();
+     const { toggleNotification } = strapiAdmin.useNotification();
+     const { _unstableFormatAPIError: formatAPIError } = strapiAdmin.useAPIErrorHandler();
+     const { data: defaultLocales, error } = locales.useGetDefaultLocalesQuery();
 @@ -245,7 +246,7 @@ const BaseForm = ({ mode = 'create' })=>{
          return null;
      }
@@ -288,6 +308,14 @@ index 70e5ce3..f45a6b7 100644
      const [visible, setVisible] = React.useState(false);
      return /*#__PURE__*/ jsxs(Modal.Root, {
          open: visible,
+@@ -205,8 +206,8 @@ const CreateLocale = ({ disabled, variant = 'default' })=>{
+ };
+ const BaseForm = ({ mode = 'create' })=>{
+-    const { formatMessage } = useIntl();
++    const { formatMessage, locale: language } = useIntl();
+     const { toggleNotification } = useNotification();
+     const { _unstableFormatAPIError: formatAPIError } = useAPIErrorHandler();
+     const { data: defaultLocales, error } = useGetDefaultLocalesQuery();
 @@ -223,7 +224,7 @@ const BaseForm = ({ mode = 'create' })=>{
          return null;
      }
